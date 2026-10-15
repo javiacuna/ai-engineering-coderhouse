@@ -1,0 +1,13 @@
+# Secretos: NUNCA subir
+.env
+
+# Entorno virtual y caché de Python
+.venv*/
+venv/
+__pycache__/
+*.pyc
+
+# Archivos del sistema / editor
+.DS_Store
+.vscode/
+.idea/
