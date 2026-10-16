@@ -13,7 +13,7 @@ Ejercicios y pre-entregas del curso **AI Engineering** de Coderhouse, en Python 
 
 ```bash
 # 1. Clonar el repo
-git clone https://github.com/TU-USUARIO/ai-engineering-coderhouse.git
+git clone https://github.com/javiacuna/ai-engineering-coderhouse.git
 cd ai-engineering-coderhouse
 
 # 2. Crear y activar un entorno virtual
