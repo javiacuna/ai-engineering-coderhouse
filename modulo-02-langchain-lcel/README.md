@@ -36,3 +36,28 @@ modelo = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 from langchain_anthropic import ChatAnthropic
 modelo = ChatAnthropic(model="claude-sonnet-5-5", temperature=0.3)
 ```
+
+## Ejercicio: Validación estructurada y resiliencia en cadenas
+
+📁 [`ejercicio-validacion-estructurada/`](ejercicio-validacion-estructurada/)
+
+Extrae información de un texto y la devuelve como un objeto Pydantic validado, no como texto libre.
+
+**Esquema `EntityExtraction` (Pydantic v2)**
+- `topic: str` (no vacío), `entities: List[str]`, `sentiment_score: float` entre 0 y 1 (`Field(ge=0, le=1)`).
+- `language: Optional[str]` con `pattern=r"^[a-z]{2}$"` (código ISO de idioma, opcional).
+- `@field_validator("entities")`: limpia espacios, descarta vacías, deduplica sin importar mayúsculas y rechaza la lista si queda vacía.
+
+**Resiliencia en capas**
+1. `.with_structured_output(EntityExtraction)`: el modelo responde con una instancia del esquema.
+2. `.with_retry(stop_after_attempt=3, wait_exponential_jitter=True)`: hasta 3 intentos con backoff.
+3. `.with_fallbacks([...])`: si se agotan los reintentos, usa un modelo alternativo (`GEMINI_FALLBACK_MODEL`).
+4. Si también falla, el `except` devuelve un **resultado degradado** (`topic="desconocido"`, `entities=[]`, sentimiento neutral) en vez de cortar el programa.
+
+Usa `logging` (con hora y nivel) en lugar de `print` para dejar trazabilidad de errores y degradaciones.
+
+Variables necesarias en `.env`: `GOOGLE_API_KEY`, `GEMINI_MODEL` y `GEMINI_FALLBACK_MODEL` (ver `.env.example`).
+
+```bash
+python ejercicio-validacion-estructurada/validacion_estructurada.py
+```
