@@ -8,6 +8,7 @@ Ejercicios y pre-entregas del curso **AI Engineering** de Coderhouse, en Python 
 |---|---|---|
 | [01](modulo-01-asyncio-y-clientes/) | Asincronía con asyncio y abstracción de clientes LLM | Orquestador concurrente · Cliente LLM unificado |
 | [02](modulo-02-langchain-lcel/) | Orquestación con LangChain (LCEL) | Refactorización a LCEL asíncrono |
+| [03](modulo-03-embeddings-vector-db/) | Embeddings y similitud semántica | Palabras clave vs. embeddings con similitud coseno |
 
 ## Cómo correr los ejemplos
 

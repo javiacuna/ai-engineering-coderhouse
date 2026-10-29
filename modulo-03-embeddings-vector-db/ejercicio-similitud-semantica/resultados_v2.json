@@ -1,0 +1,1044 @@
+{
+  "documentos": {
+    "R1": "Publicamos cada componente del backend como un contenedor independiente en el clúster de Kubernetes.",
+    "R2": "La aplicación está dividida en servicios pequeños que se ponen en producción por separado.",
+    "R3": "Cada módulo de la plataforma se empaqueta con Docker y se libera sin afectar al resto del sistema.",
+    "R4": "Nuestro pipeline de CI/CD lleva automáticamente cada API autónoma desde el repositorio hasta los servidores.",
+    "R5": "En lugar de un monolito, entregamos piezas de software desacopladas que escalan cada una por su cuenta.",
+    "I1": "Contratamos un servicio de micro limpieza con despliegue de personal en todo el edificio.",
+    "I2": "Refactorizamos las funciones del backend para que el código sea más fácil de leer.",
+    "I3": "El equipo de diseño actualizó la paleta de colores de la aplicación móvil.",
+    "I4": "Los servicios de streaming publican sus series nuevas cada viernes en distintas plataformas.",
+    "C1": "No hacemos despliegue de microservicios: todo el sistema es un único monolito.",
+    "C2": "Volvimos a un monolito porque mantener servicios separados en producción era demasiado costoso.",
+    "C3": "Desistimos de partir la aplicación: seguimos publicando un único ejecutable con todo el sistema."
+  },
+  "consultas": {
+    "afirmativa": {
+      "texto": "despliegue de microservicios",
+      "relevantes": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ]
+    },
+    "negada": {
+      "texto": "aplicación monolítica sin microservicios",
+      "relevantes": [
+        "C1",
+        "C2",
+        "C3"
+      ]
+    }
+  },
+  "metodos": {
+    "tfidf": {
+      "afirmativa": {
+        "puntajes": {
+          "R1": 0.0,
+          "R2": 0.0,
+          "R3": 0.0,
+          "R4": 0.0,
+          "R5": 0.0,
+          "I1": 0.2121,
+          "I2": 0.0,
+          "I3": 0.0,
+          "I4": 0.0,
+          "C1": 0.5365,
+          "C2": 0.0,
+          "C3": 0.0
+        },
+        "ranking": [
+          "C1",
+          "I1",
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5",
+          "I2",
+          "I3",
+          "I4",
+          "C2",
+          "C3"
+        ],
+        "p@3": 0.0,
+        "p@5": 0.0,
+        "margen": -0.5365,
+        "umbral": 0.5365,
+        "exactitud_umbral": 0.5,
+        "promedio_por_grupo": {
+          "R": 0.0,
+          "I": 0.053,
+          "C": 0.1788
+        }
+      },
+      "negada": {
+        "puntajes": {
+          "R1": 0.0,
+          "R2": 0.1287,
+          "R3": 0.0,
+          "R4": 0.0,
+          "R5": 0.0,
+          "I1": 0.0,
+          "I2": 0.0,
+          "I3": 0.132,
+          "I4": 0.0,
+          "C1": 0.2027,
+          "C2": 0.0,
+          "C3": 0.1287
+        },
+        "ranking": [
+          "C1",
+          "I3",
+          "R2",
+          "C3",
+          "R1",
+          "R3",
+          "R4",
+          "R5",
+          "I1",
+          "I2",
+          "I4",
+          "C2"
+        ],
+        "p@3": 0.333,
+        "p@5": 0.4,
+        "margen": -0.132,
+        "umbral": 0.2027,
+        "exactitud_umbral": 0.833,
+        "promedio_por_grupo": {
+          "R": 0.0257,
+          "I": 0.033,
+          "C": 0.1104
+        }
+      }
+    },
+    "emb:gemini-embedding-001": {
+      "modelo": "gemini-embedding-001",
+      "dimensiones": 3072,
+      "formas": {
+        "consulta": [
+          1,
+          3072
+        ],
+        "documentos": [
+          12,
+          3072
+        ]
+      },
+      "vector_ejemplo": [
+        -0.0089,
+        -0.0155,
+        0.0145,
+        -0.067,
+        0.014
+      ],
+      "matriz_docs": [
+        [
+          1.0,
+          0.8387,
+          0.8382,
+          0.8293,
+          0.8298,
+          0.7212,
+          0.8079,
+          0.7066,
+          0.74,
+          0.8414,
+          0.7836,
+          0.7874
+        ],
+        [
+          0.8387,
+          1.0,
+          0.8352,
+          0.8153,
+          0.8592,
+          0.7506,
+          0.7814,
+          0.7228,
+          0.7482,
+          0.8653,
+          0.8249,
+          0.8273
+        ],
+        [
+          0.8382,
+          0.8352,
+          1.0,
+          0.8212,
+          0.8453,
+          0.7168,
+          0.7727,
+          0.7281,
+          0.7309,
+          0.8427,
+          0.7603,
+          0.8173
+        ],
+        [
+          0.8293,
+          0.8153,
+          0.8212,
+          1.0,
+          0.8214,
+          0.7083,
+          0.779,
+          0.6968,
+          0.7403,
+          0.8251,
+          0.7544,
+          0.7649
+        ],
+        [
+          0.8298,
+          0.8592,
+          0.8453,
+          0.8214,
+          1.0,
+          0.7504,
+          0.7809,
+          0.7128,
+          0.7269,
+          0.8738,
+          0.8259,
+          0.8183
+        ],
+        [
+          0.7212,
+          0.7506,
+          0.7168,
+          0.7083,
+          0.7504,
+          1.0,
+          0.7329,
+          0.7029,
+          0.7032,
+          0.7937,
+          0.7383,
+          0.7156
+        ],
+        [
+          0.8079,
+          0.7814,
+          0.7727,
+          0.779,
+          0.7809,
+          0.7329,
+          1.0,
+          0.7697,
+          0.7091,
+          0.781,
+          0.7691,
+          0.7942
+        ],
+        [
+          0.7066,
+          0.7228,
+          0.7281,
+          0.6968,
+          0.7128,
+          0.7029,
+          0.7697,
+          1.0,
+          0.7062,
+          0.7215,
+          0.6997,
+          0.7251
+        ],
+        [
+          0.74,
+          0.7482,
+          0.7309,
+          0.7403,
+          0.7269,
+          0.7032,
+          0.7091,
+          0.7062,
+          1.0,
+          0.75,
+          0.6899,
+          0.7178
+        ],
+        [
+          0.8414,
+          0.8653,
+          0.8427,
+          0.8251,
+          0.8738,
+          0.7937,
+          0.781,
+          0.7215,
+          0.75,
+          1.0,
+          0.8583,
+          0.8399
+        ],
+        [
+          0.7836,
+          0.8249,
+          0.7603,
+          0.7544,
+          0.8259,
+          0.7383,
+          0.7691,
+          0.6997,
+          0.6899,
+          0.8583,
+          1.0,
+          0.7948
+        ],
+        [
+          0.7874,
+          0.8273,
+          0.8173,
+          0.7649,
+          0.8183,
+          0.7156,
+          0.7942,
+          0.7251,
+          0.7178,
+          0.8399,
+          0.7948,
+          1.0
+        ]
+      ],
+      "afirmativa": {
+        "puntajes": {
+          "R1": 0.7345,
+          "R2": 0.7522,
+          "R3": 0.7177,
+          "R4": 0.722,
+          "R5": 0.7349,
+          "I1": 0.6929,
+          "I2": 0.6546,
+          "I3": 0.5886,
+          "I4": 0.6376,
+          "C1": 0.7984,
+          "C2": 0.7177,
+          "C3": 0.6772
+        },
+        "ranking": [
+          "C1",
+          "R2",
+          "R5",
+          "R1",
+          "R4",
+          "C2",
+          "R3",
+          "I1",
+          "C3",
+          "I2",
+          "I4",
+          "I3"
+        ],
+        "p@3": 0.667,
+        "p@5": 0.8,
+        "margen": -0.0806,
+        "umbral": 0.722,
+        "exactitud_umbral": 0.833,
+        "promedio_por_grupo": {
+          "R": 0.7323,
+          "I": 0.6434,
+          "C": 0.7311
+        }
+      },
+      "negada": {
+        "puntajes": {
+          "R1": 0.712,
+          "R2": 0.7563,
+          "R3": 0.692,
+          "R4": 0.6809,
+          "R5": 0.7529,
+          "I1": 0.6515,
+          "I2": 0.6723,
+          "I3": 0.6117,
+          "I4": 0.5959,
+          "C1": 0.8029,
+          "C2": 0.7617,
+          "C3": 0.7218
+        },
+        "ranking": [
+          "C1",
+          "C2",
+          "R2",
+          "R5",
+          "C3",
+          "R1",
+          "R3",
+          "R4",
+          "I2",
+          "I1",
+          "I3",
+          "I4"
+        ],
+        "p@3": 0.667,
+        "p@5": 0.6,
+        "margen": -0.0345,
+        "umbral": 0.7617,
+        "exactitud_umbral": 0.917,
+        "promedio_por_grupo": {
+          "R": 0.7188,
+          "I": 0.6329,
+          "C": 0.7621
+        }
+      }
+    },
+    "emb:gemini-embedding-001@768": {
+      "modelo": "gemini-embedding-001",
+      "dimensiones": 768,
+      "formas": {
+        "consulta": [
+          1,
+          768
+        ],
+        "documentos": [
+          12,
+          768
+        ]
+      },
+      "vector_ejemplo": [
+        -0.0089,
+        -0.0155,
+        0.0145,
+        -0.067,
+        0.014
+      ],
+      "matriz_docs": [
+        [
+          1.0,
+          0.8355,
+          0.8348,
+          0.8163,
+          0.8232,
+          0.6958,
+          0.7985,
+          0.6793,
+          0.7154,
+          0.8333,
+          0.7674,
+          0.7732
+        ],
+        [
+          0.8355,
+          1.0,
+          0.8287,
+          0.8055,
+          0.8495,
+          0.7334,
+          0.7727,
+          0.7007,
+          0.7253,
+          0.8633,
+          0.8156,
+          0.8162
+        ],
+        [
+          0.8348,
+          0.8287,
+          1.0,
+          0.8126,
+          0.8394,
+          0.6972,
+          0.7544,
+          0.7083,
+          0.7067,
+          0.8389,
+          0.7484,
+          0.8125
+        ],
+        [
+          0.8163,
+          0.8055,
+          0.8126,
+          1.0,
+          0.8098,
+          0.6824,
+          0.7583,
+          0.6677,
+          0.7174,
+          0.8147,
+          0.7367,
+          0.7475
+        ],
+        [
+          0.8232,
+          0.8495,
+          0.8394,
+          0.8098,
+          1.0,
+          0.7292,
+          0.7635,
+          0.691,
+          0.7023,
+          0.8699,
+          0.813,
+          0.8073
+        ],
+        [
+          0.6958,
+          0.7334,
+          0.6972,
+          0.6824,
+          0.7292,
+          1.0,
+          0.71,
+          0.6768,
+          0.6669,
+          0.7751,
+          0.715,
+          0.69
+        ],
+        [
+          0.7985,
+          0.7727,
+          0.7544,
+          0.7583,
+          0.7635,
+          0.71,
+          1.0,
+          0.7506,
+          0.6804,
+          0.7604,
+          0.7524,
+          0.7793
+        ],
+        [
+          0.6793,
+          0.7007,
+          0.7083,
+          0.6677,
+          0.691,
+          0.6768,
+          0.7506,
+          1.0,
+          0.6787,
+          0.6971,
+          0.6779,
+          0.7026
+        ],
+        [
+          0.7154,
+          0.7253,
+          0.7067,
+          0.7174,
+          0.7023,
+          0.6669,
+          0.6804,
+          0.6787,
+          1.0,
+          0.7232,
+          0.6574,
+          0.6831
+        ],
+        [
+          0.8333,
+          0.8633,
+          0.8389,
+          0.8147,
+          0.8699,
+          0.7751,
+          0.7604,
+          0.6971,
+          0.7232,
+          1.0,
+          0.8502,
+          0.8305
+        ],
+        [
+          0.7674,
+          0.8156,
+          0.7484,
+          0.7367,
+          0.813,
+          0.715,
+          0.7524,
+          0.6779,
+          0.6574,
+          0.8502,
+          1.0,
+          0.7806
+        ],
+        [
+          0.7732,
+          0.8162,
+          0.8125,
+          0.7475,
+          0.8073,
+          0.69,
+          0.7793,
+          0.7026,
+          0.6831,
+          0.8305,
+          0.7806,
+          1.0
+        ]
+      ],
+      "afirmativa": {
+        "puntajes": {
+          "R1": 0.7147,
+          "R2": 0.7457,
+          "R3": 0.6975,
+          "R4": 0.7029,
+          "R5": 0.7135,
+          "I1": 0.6749,
+          "I2": 0.6243,
+          "I3": 0.5624,
+          "I4": 0.6022,
+          "C1": 0.7803,
+          "C2": 0.7014,
+          "C3": 0.6556
+        },
+        "ranking": [
+          "C1",
+          "R2",
+          "R1",
+          "R5",
+          "R4",
+          "C2",
+          "R3",
+          "I1",
+          "C3",
+          "I2",
+          "I4",
+          "I3"
+        ],
+        "p@3": 0.667,
+        "p@5": 0.8,
+        "margen": -0.0828,
+        "umbral": 0.7029,
+        "exactitud_umbral": 0.833,
+        "promedio_por_grupo": {
+          "R": 0.7149,
+          "I": 0.6159,
+          "C": 0.7124
+        }
+      },
+      "negada": {
+        "puntajes": {
+          "R1": 0.7013,
+          "R2": 0.7469,
+          "R3": 0.6752,
+          "R4": 0.6692,
+          "R5": 0.7388,
+          "I1": 0.6265,
+          "I2": 0.6549,
+          "I3": 0.5876,
+          "I4": 0.5628,
+          "C1": 0.792,
+          "C2": 0.748,
+          "C3": 0.7121
+        },
+        "ranking": [
+          "C1",
+          "C2",
+          "R2",
+          "R5",
+          "C3",
+          "R1",
+          "R3",
+          "R4",
+          "I2",
+          "I1",
+          "I3",
+          "I4"
+        ],
+        "p@3": 0.667,
+        "p@5": 0.6,
+        "margen": -0.0348,
+        "umbral": 0.748,
+        "exactitud_umbral": 0.917,
+        "promedio_por_grupo": {
+          "R": 0.7063,
+          "I": 0.608,
+          "C": 0.7507
+        }
+      }
+    },
+    "emb:gemini-embedding-2-preview": {
+      "modelo": "gemini-embedding-2-preview",
+      "dimensiones": 3072,
+      "formas": {
+        "consulta": [
+          1,
+          3072
+        ],
+        "documentos": [
+          12,
+          3072
+        ]
+      },
+      "vector_ejemplo": [
+        -0.0308,
+        0.007,
+        0.0078,
+        0.0158,
+        0.0227
+      ],
+      "matriz_docs": [
+        [
+          1.0,
+          0.7887,
+          0.8181,
+          0.7996,
+          0.8077,
+          0.6482,
+          0.7031,
+          0.6045,
+          0.6443,
+          0.7811,
+          0.7256,
+          0.6775
+        ],
+        [
+          0.7887,
+          1.0,
+          0.7686,
+          0.7369,
+          0.806,
+          0.6401,
+          0.5939,
+          0.6556,
+          0.6164,
+          0.7624,
+          0.743,
+          0.6429
+        ],
+        [
+          0.8181,
+          0.7686,
+          1.0,
+          0.7756,
+          0.7938,
+          0.6173,
+          0.6313,
+          0.5821,
+          0.6409,
+          0.7593,
+          0.6703,
+          0.7012
+        ],
+        [
+          0.7996,
+          0.7369,
+          0.7756,
+          1.0,
+          0.7777,
+          0.613,
+          0.6379,
+          0.5549,
+          0.5999,
+          0.761,
+          0.6913,
+          0.6505
+        ],
+        [
+          0.8077,
+          0.806,
+          0.7938,
+          0.7777,
+          1.0,
+          0.6506,
+          0.6402,
+          0.5913,
+          0.606,
+          0.8333,
+          0.7958,
+          0.7001
+        ],
+        [
+          0.6482,
+          0.6401,
+          0.6173,
+          0.613,
+          0.6506,
+          1.0,
+          0.5702,
+          0.5213,
+          0.5695,
+          0.6371,
+          0.5891,
+          0.575
+        ],
+        [
+          0.7031,
+          0.5939,
+          0.6313,
+          0.6379,
+          0.6402,
+          0.5702,
+          1.0,
+          0.5629,
+          0.5426,
+          0.6314,
+          0.6473,
+          0.6469
+        ],
+        [
+          0.6045,
+          0.6556,
+          0.5821,
+          0.5549,
+          0.5913,
+          0.5213,
+          0.5629,
+          1.0,
+          0.5342,
+          0.5445,
+          0.5557,
+          0.5324
+        ],
+        [
+          0.6443,
+          0.6164,
+          0.6409,
+          0.5999,
+          0.606,
+          0.5695,
+          0.5426,
+          0.5342,
+          1.0,
+          0.5822,
+          0.5514,
+          0.5572
+        ],
+        [
+          0.7811,
+          0.7624,
+          0.7593,
+          0.761,
+          0.8333,
+          0.6371,
+          0.6314,
+          0.5445,
+          0.5822,
+          1.0,
+          0.8606,
+          0.7725
+        ],
+        [
+          0.7256,
+          0.743,
+          0.6703,
+          0.6913,
+          0.7958,
+          0.5891,
+          0.6473,
+          0.5557,
+          0.5514,
+          0.8606,
+          1.0,
+          0.729
+        ],
+        [
+          0.6775,
+          0.6429,
+          0.7012,
+          0.6505,
+          0.7001,
+          0.575,
+          0.6469,
+          0.5324,
+          0.5572,
+          0.7725,
+          0.729,
+          1.0
+        ]
+      ],
+      "afirmativa": {
+        "puntajes": {
+          "R1": 0.7703,
+          "R2": 0.7809,
+          "R3": 0.7494,
+          "R4": 0.7454,
+          "R5": 0.7294,
+          "I1": 0.596,
+          "I2": 0.5852,
+          "I3": 0.5276,
+          "I4": 0.5719,
+          "C1": 0.7614,
+          "C2": 0.7071,
+          "C3": 0.6356
+        },
+        "ranking": [
+          "R2",
+          "R1",
+          "C1",
+          "R3",
+          "R4",
+          "R5",
+          "C2",
+          "C3",
+          "I1",
+          "I2",
+          "I4",
+          "I3"
+        ],
+        "p@3": 0.667,
+        "p@5": 0.8,
+        "margen": -0.0321,
+        "umbral": 0.7294,
+        "exactitud_umbral": 0.917,
+        "promedio_por_grupo": {
+          "R": 0.7551,
+          "I": 0.5702,
+          "C": 0.7014
+        }
+      },
+      "negada": {
+        "puntajes": {
+          "R1": 0.6911,
+          "R2": 0.7382,
+          "R3": 0.6818,
+          "R4": 0.6696,
+          "R5": 0.7666,
+          "I1": 0.5498,
+          "I2": 0.6054,
+          "I3": 0.5727,
+          "I4": 0.5442,
+          "C1": 0.8182,
+          "C2": 0.7792,
+          "C3": 0.6857
+        },
+        "ranking": [
+          "C1",
+          "C2",
+          "R5",
+          "R2",
+          "R1",
+          "C3",
+          "R3",
+          "R4",
+          "I2",
+          "I3",
+          "I1",
+          "I4"
+        ],
+        "p@3": 0.667,
+        "p@5": 0.4,
+        "margen": -0.0809,
+        "umbral": 0.7792,
+        "exactitud_umbral": 0.917,
+        "promedio_por_grupo": {
+          "R": 0.7095,
+          "I": 0.568,
+          "C": 0.761
+        }
+      }
+    },
+    "reranker": {
+      "modelo": "gemini-3.8-flash",
+      "afirmativa": {
+        "puntajes": {
+          "R1": 1.0,
+          "R2": 1.0,
+          "R3": 0.95,
+          "R4": 0.95,
+          "R5": 0.9,
+          "I1": 0.0,
+          "I2": 0.1,
+          "I3": 0.0,
+          "I4": 0.0,
+          "C1": 0.05,
+          "C2": 0.1,
+          "C3": 0.05
+        },
+        "ranking": [
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5",
+          "I2",
+          "C2",
+          "C1",
+          "C3",
+          "I1",
+          "I3",
+          "I4"
+        ],
+        "p@3": 1.0,
+        "p@5": 1.0,
+        "margen": 0.8,
+        "umbral": 0.9,
+        "exactitud_umbral": 1.0,
+        "promedio_por_grupo": {
+          "R": 0.96,
+          "I": 0.025,
+          "C": 0.0667
+        },
+        "motivos": {
+          "R1": "Describe el despliegue de componentes independientes usando contenedores en Kubernetes.",
+          "R2": "Explica la puesta en producción por separado de servicios pequeños.",
+          "R3": "Detalla el empaquetado y liberación independiente de módulos desacoplados.",
+          "R4": "Describe el pipeline de despliegue continuo de APIs autónomas.",
+          "R5": "Menciona la entrega y escalado de piezas de software desacopladas no monolíticas.",
+          "I1": "Trata sobre servicios de limpieza y personal, tema totalmente ajeno.",
+          "I2": "Habla de refactorización de código backend sin mencionar despliegue ni microservicios.",
+          "I3": "Trata sobre diseño visual de una app móvil, totalmente irrelevante.",
+          "I4": "Refiere a series de televisión en plataformas de streaming.",
+          "C1": "Niega expresamente el uso y despliegue de microservicios.",
+          "C2": "Explica el abandono del despliegue de servicios separados para volver al monolito.",
+          "C3": "Rechaza dividir la aplicación y opta por publicar un ejecutable único."
+        }
+      },
+      "negada": {
+        "puntajes": {
+          "R1": 0.1,
+          "R2": 0.1,
+          "R3": 0.1,
+          "R4": 0.1,
+          "R5": 0.0,
+          "I1": 0.0,
+          "I2": 0.0,
+          "I3": 0.0,
+          "I4": 0.0,
+          "C1": 1.0,
+          "C2": 0.95,
+          "C3": 0.95
+        },
+        "ranking": [
+          "C1",
+          "C2",
+          "C3",
+          "R1",
+          "R2",
+          "R3",
+          "R4",
+          "R5",
+          "I1",
+          "I2",
+          "I3",
+          "I4"
+        ],
+        "p@3": 1.0,
+        "p@5": 0.6,
+        "margen": 0.85,
+        "umbral": 0.95,
+        "exactitud_umbral": 1.0,
+        "promedio_por_grupo": {
+          "R": 0.08,
+          "I": 0.0,
+          "C": 0.9667
+        },
+        "motivos": {
+          "R1": "Describe una arquitectura basada en contenedores independientes y no un monolito.",
+          "R2": "Describe explícitamente una arquitectura de servicios divididos, contraria al monolito.",
+          "R3": "Describe módulos desacoplados e independientes típicos de microservicios.",
+          "R4": "Describe el despliegue de APIs autónomas e independientes.",
+          "R5": "Descarta explícitamente el uso de un monolito a favor de piezas desacopladas.",
+          "I1": "Trata sobre servicios de limpieza física, totalmente irrelevante.",
+          "I2": "Menciona refactorización de código sin especificar arquitectura monolítica.",
+          "I3": "Habla de diseño visual en una aplicación móvil, irrelevante.",
+          "I4": "Habla de series y plataformas de streaming, completamente irrelevante.",
+          "C1": "Afirma explícitamente ser un único monolito sin despliegue de microservicios.",
+          "C2": "Explica la adopción de un monolito descartando servicios separados.",
+          "C3": "Describe el mantenimiento de un único ejecutable monolítico sin particiones."
+        }
+      }
+    }
+  }
+}

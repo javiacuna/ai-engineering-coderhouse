@@ -6,3 +6,5 @@ langchain
 langchain-openai
 langchain-anthropic
 langchain-google-genai
+scikit-learn
+numpy
