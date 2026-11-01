@@ -5,6 +5,7 @@
 .venv*/
 venv/
 __pycache__/
+.pytest_cache/
 *.pyc
 
 # Archivos del sistema / editor

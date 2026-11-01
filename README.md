@@ -9,7 +9,7 @@ Ejercicios y pre-entregas del curso **AI Engineering** de Coderhouse, en Python 
 | Módulo | Tema | Trabajos |
 |---|---|---|
 | [01](modulo-01-asyncio-y-clientes/) | Asincronía con asyncio y abstracción de clientes LLM | Orquestador concurrente · Cliente LLM (ejercicio) · **Pre-entrega 1: Unified Async LLM Client** |
-| [02](modulo-02-langchain-lcel/) | Orquestación con LangChain (LCEL) | LCEL asíncrono · Validación estructurada con retry y fallback |
+| [02](modulo-02-langchain-lcel/) | Orquestación con LangChain (LCEL) | LCEL asíncrono · Validación estructurada con retry y fallback · **Pre-entrega 2: Pipeline de procesamiento validado** |
 | [03](modulo-03-embeddings-vector-db/) | Embeddings y similitud semántica | Embeddings y similitud (informe PDF) · Limpieza y chunking por tokens |
 
 ## Cómo correr los ejemplos

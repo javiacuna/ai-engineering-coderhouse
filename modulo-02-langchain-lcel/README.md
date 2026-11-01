@@ -61,3 +61,15 @@ Variables necesarias en `.env`: `GOOGLE_API_KEY`, `GEMINI_MODEL` y `GEMINI_FALLB
 ```bash
 python ejercicio-validacion-estructurada/structured_validation.py
 ```
+
+## Pre-entrega 2: Pipeline de procesamiento validado
+
+📁 [`pre-entrega-2-pipeline-validado/`](pre-entrega-2-pipeline-validado/) · ver su [README](pre-entrega-2-pipeline-validado/README.md)
+
+Pipeline LCEL que extrae entidades técnicas de un texto (arquitectura o log de error) y devuelve un objeto Pydantic validado con `tecnologias`, `nivel_de_criticidad` y `resumen_tecnico`: `prompt | model.with_structured_output(Schema)`, detección de respuestas cortadas por `finish_reason`, reintentos con `.with_retry()`, fallback de modelo opcional, rechazo de valores de relleno detectados en la prueba de estrés y 22 tests sin API keys.
+
+```bash
+cd pre-entrega-2-pipeline-validado
+python main.py
+python -m pytest -q
+```
