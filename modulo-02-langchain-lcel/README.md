@@ -7,13 +7,13 @@
 Migración de la llamada "cruda" al SDK (Módulo 1) a una cadena declarativa con LCEL:
 
 ```
-{"pregunta": "..."} → ChatPromptTemplate → ChatGoogleGenerativeAI → StrOutputParser → str
+{"question": "..."} → ChatPromptTemplate → ChatGoogleGenerativeAI → StrOutputParser → str
 ```
 
-- `ChatPromptTemplate.from_messages` con roles **system** y **human** y la variable `{pregunta}`.
+- `ChatPromptTemplate.from_messages` con roles **system** y **human** y la variable `{question}`.
 - Modelo de chat de LangChain configurado con `model` y `temperature`.
 - Cadena compuesta con el operador `|`: `prompt | modelo | parser`.
-- Ejecución asíncrona con `await chain.ainvoke({"pregunta": ...})`.
+- Ejecución asíncrona con `await chain.ainvoke({"question": ...})`.
 - `StrOutputParser` devuelve texto plano en lugar del `AIMessage` completo.
 
 ### Proveedor del modelo
@@ -52,12 +52,12 @@ Extrae información de un texto y la devuelve como un objeto Pydantic validado, 
 1. `.with_structured_output(EntityExtraction)`: el modelo responde con una instancia del esquema.
 2. `.with_retry(stop_after_attempt=3, wait_exponential_jitter=True)`: hasta 3 intentos con backoff.
 3. `.with_fallbacks([...])`: si se agotan los reintentos, usa un modelo alternativo (`GEMINI_FALLBACK_MODEL`).
-4. Si también falla, el `except` devuelve un **resultado degradado** (`topic="desconocido"`, `entities=[]`, sentimiento neutral) en vez de cortar el programa.
+4. Si también falla, el `except` devuelve un **resultado degradado** (`topic="unknown"`, `entities=[]`, sentimiento neutral) en vez de cortar el programa.
 
 Usa `logging` (con hora y nivel) en lugar de `print` para dejar trazabilidad de errores y degradaciones.
 
 Variables necesarias en `.env`: `GOOGLE_API_KEY`, `GEMINI_MODEL` y `GEMINI_FALLBACK_MODEL` (ver `.env.example`).
 
 ```bash
-python ejercicio-validacion-estructurada/validacion_estructurada.py
+python ejercicio-validacion-estructurada/structured_validation.py
 ```

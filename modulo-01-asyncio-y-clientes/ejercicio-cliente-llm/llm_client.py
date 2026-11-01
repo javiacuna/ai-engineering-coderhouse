@@ -15,25 +15,25 @@ class Provider(str, Enum):
 
 class LLMConfig(BaseModel):
     """
-    API Keys guardadas como SecretStr (se ocultan al imprimir).
-    Pydantic valida que las keys no estén vacías y que haya al menos una.
+    API keys stored as SecretStr (hidden when printed).
+    Pydantic checks that keys are not blank and that at least one is present.
     """
     openai_api_key: SecretStr | None = None
     anthropic_api_key: SecretStr | None = None
 
     @field_validator("openai_api_key", "anthropic_api_key", mode="before")
     @classmethod
-    def vacia_a_none(cls, valor):
-        # Una key vacía o con solo espacios cuenta como "no hay key"
-        texto = valor.get_secret_value() if isinstance(valor, SecretStr) else valor
-        if texto is None or not str(texto).strip():
+    def blank_to_none(cls, value):
+        # An empty or whitespace-only key counts as "no key"
+        text = value.get_secret_value() if isinstance(value, SecretStr) else value
+        if text is None or not str(text).strip():
             return None
-        return valor
+        return value
 
     @model_validator(mode="after")
-    def al_menos_una_key(self):
+    def at_least_one_key(self):
         if self.openai_api_key is None and self.anthropic_api_key is None:
-            raise ValueError("Definí al menos OPENAI_API_KEY o ANTHROPIC_API_KEY")
+            raise ValueError("Set at least OPENAI_API_KEY or ANTHROPIC_API_KEY")
         return self
 
 class BaseLLMClient(ABC):
@@ -61,7 +61,7 @@ class AnthropicClient(BaseLLMClient):
     async def chat(self, prompt: str) -> str:
         response = await self.client.messages.create(
             model=self.model,
-            max_tokens=1024,  # en Anthropic es obligatorio
+            max_tokens=1024,  # required by Anthropic
             messages=[{"role": "user", "content": prompt}],
         )
         return response.content[0].text
@@ -71,15 +71,15 @@ class LLMFactory:
     def create_client(provider: Provider, config: LLMConfig) -> BaseLLMClient:
         if provider == Provider.OPENAI:
             if config.openai_api_key is None:
-                raise ValueError("La config no tiene OPENAI_API_KEY")
+                raise ValueError("Config has no OPENAI_API_KEY")
             return OpenAIClient(config.openai_api_key.get_secret_value())
 
         if provider == Provider.ANTHROPIC:
             if config.anthropic_api_key is None:
-                raise ValueError("La config no tiene ANTHROPIC_API_KEY")
+                raise ValueError("Config has no ANTHROPIC_API_KEY")
             return AnthropicClient(config.anthropic_api_key.get_secret_value())
 
-        raise ValueError(f"Proveedor no soportado: {provider}")
+        raise ValueError(f"Unsupported provider: {provider}")
 
 async def main():
     try:
@@ -88,25 +88,25 @@ async def main():
             anthropic_api_key=SecretStr(os.getenv("ANTHROPIC_API_KEY", "")),
         )
     except ValidationError as e:
-        print(f"Configuración inválida: {e.errors()[0]['msg']}")
+        print(f"Invalid configuration: {e.errors()[0]['msg']}")
         return
-    print(config)  # las keys se ven como '**********'
+    print(config)  # keys are shown as '**********'
 
     for provider in Provider:
         try:
             client = LLMFactory.create_client(provider, config)
-            respuesta = await client.chat("¿Qué es la entropía? Respondé en una oración.")
-            print(f"[{provider.value}] {respuesta}")
+            answer = await client.chat("¿Qué es la entropía? Respondé en una oración.")
+            print(f"[{provider.value}] {answer}")
         except ValueError as e:
             print(f"[{provider.value}] CONFIG: {e}")
         except (openai.AuthenticationError, anthropic.AuthenticationError):
-            print(f"[{provider.value}] CREDENCIALES: la API key es inválida")
+            print(f"[{provider.value}] CREDENTIALS: the API key is invalid")
         except (openai.RateLimitError, anthropic.RateLimitError):
-            print(f"[{provider.value}] LÍMITE: superaste la cuota o el rate limit")
+            print(f"[{provider.value}] LIMIT: quota or rate limit exceeded")
         except (openai.NotFoundError, anthropic.NotFoundError):
-            print(f"[{provider.value}] MODELO: el modelo no existe o no tenés acceso")
+            print(f"[{provider.value}] MODEL: the model does not exist or you have no access")
         except (openai.APIConnectionError, anthropic.APIConnectionError):
-            print(f"[{provider.value}] RED: no se pudo conectar con la API")
+            print(f"[{provider.value}] NETWORK: could not connect to the API")
         except (openai.APIStatusError, anthropic.APIStatusError) as e:
             print(f"[{provider.value}] API: error {e.status_code}")
 

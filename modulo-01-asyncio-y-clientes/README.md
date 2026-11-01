@@ -14,29 +14,27 @@ Simula un backend que consulta varios modelos de IA de forma concurrente:
 No necesita API keys ni dependencias externas:
 
 ```bash
-python ejercicio-orquestador/orquestador.py
+python ejercicio-orquestador/orchestrator.py
 ```
 
-## Pre-entrega: Cliente LLM unificado
+## Ejercicio: Cliente LLM con Factory (esqueleto de clase)
 
-📁 [`pre-entrega-cliente-llm/`](pre-entrega-cliente-llm/)
+📁 [`ejercicio-cliente-llm/`](ejercicio-cliente-llm/)
 
-Capa de abstracción para hablar con OpenAI y Anthropic con una interfaz común:
-
-- `BaseLLMClient` (clase abstracta) con `async def chat(prompt) -> str`.
-- `OpenAIClient` y `AnthropicClient` usando los SDKs asíncronos (`AsyncOpenAI`, `AsyncAnthropic`).
-- `LLMFactory` para elegir el proveedor en tiempo de ejecución.
-- `LLMConfig` con Pydantic: las keys son `SecretStr` (no aparecen en logs) y se validan con `field_validator` / `model_validator`.
-- Manejo específico de errores: credenciales, rate limit, modelo inexistente y red.
-
-Variables de entorno necesarias (al menos una):
-
-| Variable | Proveedor |
-|---|---|
-| `OPENAI_API_KEY` | OpenAI |
-| `ANTHROPIC_API_KEY` | Anthropic |
+Completa el esqueleto visto en clase: `LLMConfig` con `SecretStr` y validadores de Pydantic, `BaseLLMClient` abstracta, `OpenAIClient` y `AnthropicClient`, un `LLMFactory` y manejo de errores específico por tipo (credenciales, rate limit, modelo, red).
 
 ```bash
-export OPENAI_API_KEY="..."        # y/o ANTHROPIC_API_KEY
-python pre-entrega-cliente-llm/cliente_llm.py
+python ejercicio-cliente-llm/llm_client.py
+```
+
+## Pre-entrega 1: Unified Async LLM Client
+
+📁 [`pre-entrega-1-cliente-llm/`](pre-entrega-1-cliente-llm/) · ver su [README](pre-entrega-1-cliente-llm/README.md)
+
+Cliente asíncrono con interfaz común para OpenAI, Anthropic y Gemini: esquemas Pydantic (`schemas.py`), `AsyncLLMManager` que elige el proveedor por configuración, streaming con generadores asíncronos (`yield`), errores controlados (auth, rate limit, timeout, red) y 21 tests sin API keys.
+
+```bash
+cd pre-entrega-1-cliente-llm
+python main.py --provider gemini
+pytest -q
 ```

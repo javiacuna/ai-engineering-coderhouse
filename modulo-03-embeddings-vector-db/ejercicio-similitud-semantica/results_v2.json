@@ -1,5 +1,5 @@
 {
-  "documentos": {
+  "documents": {
     "R1": "Publicamos cada componente del backend como un contenedor independiente en el clúster de Kubernetes.",
     "R2": "La aplicación está dividida en servicios pequeños que se ponen en producción por separado.",
     "R3": "Cada módulo de la plataforma se empaqueta con Docker y se libera sin afectar al resto del sistema.",
@@ -13,10 +13,10 @@
     "C2": "Volvimos a un monolito porque mantener servicios separados en producción era demasiado costoso.",
     "C3": "Desistimos de partir la aplicación: seguimos publicando un único ejecutable con todo el sistema."
   },
-  "consultas": {
-    "afirmativa": {
-      "texto": "despliegue de microservicios",
-      "relevantes": [
+  "queries": {
+    "affirmative": {
+      "text": "despliegue de microservicios",
+      "relevant": [
         "R1",
         "R2",
         "R3",
@@ -24,19 +24,19 @@
         "R5"
       ]
     },
-    "negada": {
-      "texto": "aplicación monolítica sin microservicios",
-      "relevantes": [
+    "negated": {
+      "text": "aplicación monolítica sin microservicios",
+      "relevant": [
         "C1",
         "C2",
         "C3"
       ]
     }
   },
-  "metodos": {
+  "methods": {
     "tfidf": {
-      "afirmativa": {
-        "puntajes": {
+      "affirmative": {
+        "scores": {
           "R1": 0.0,
           "R2": 0.0,
           "R3": 0.0,
@@ -66,17 +66,17 @@
         ],
         "p@3": 0.0,
         "p@5": 0.0,
-        "margen": -0.5365,
-        "umbral": 0.5365,
-        "exactitud_umbral": 0.5,
-        "promedio_por_grupo": {
+        "margin": -0.5365,
+        "threshold": 0.5365,
+        "threshold_accuracy": 0.5,
+        "group_mean": {
           "R": 0.0,
           "I": 0.053,
           "C": 0.1788
         }
       },
-      "negada": {
-        "puntajes": {
+      "negated": {
+        "scores": {
           "R1": 0.0,
           "R2": 0.1287,
           "R3": 0.0,
@@ -106,10 +106,10 @@
         ],
         "p@3": 0.333,
         "p@5": 0.4,
-        "margen": -0.132,
-        "umbral": 0.2027,
-        "exactitud_umbral": 0.833,
-        "promedio_por_grupo": {
+        "margin": -0.132,
+        "threshold": 0.2027,
+        "threshold_accuracy": 0.833,
+        "group_mean": {
           "R": 0.0257,
           "I": 0.033,
           "C": 0.1104
@@ -117,26 +117,26 @@
       }
     },
     "emb:gemini-embedding-001": {
-      "modelo": "gemini-embedding-001",
-      "dimensiones": 3072,
-      "formas": {
-        "consulta": [
+      "model": "gemini-embedding-001",
+      "dimensions": 3072,
+      "shapes": {
+        "query": [
           1,
           3072
         ],
-        "documentos": [
+        "documents": [
           12,
           3072
         ]
       },
-      "vector_ejemplo": [
+      "sample_vector": [
         -0.0089,
         -0.0155,
         0.0145,
         -0.067,
         0.014
       ],
-      "matriz_docs": [
+      "doc_matrix": [
         [
           1.0,
           0.8387,
@@ -306,8 +306,8 @@
           1.0
         ]
       ],
-      "afirmativa": {
-        "puntajes": {
+      "affirmative": {
+        "scores": {
           "R1": 0.7345,
           "R2": 0.7522,
           "R3": 0.7177,
@@ -337,17 +337,17 @@
         ],
         "p@3": 0.667,
         "p@5": 0.8,
-        "margen": -0.0806,
-        "umbral": 0.722,
-        "exactitud_umbral": 0.833,
-        "promedio_por_grupo": {
+        "margin": -0.0806,
+        "threshold": 0.722,
+        "threshold_accuracy": 0.833,
+        "group_mean": {
           "R": 0.7323,
           "I": 0.6434,
           "C": 0.7311
         }
       },
-      "negada": {
-        "puntajes": {
+      "negated": {
+        "scores": {
           "R1": 0.712,
           "R2": 0.7563,
           "R3": 0.692,
@@ -377,10 +377,10 @@
         ],
         "p@3": 0.667,
         "p@5": 0.6,
-        "margen": -0.0345,
-        "umbral": 0.7617,
-        "exactitud_umbral": 0.917,
-        "promedio_por_grupo": {
+        "margin": -0.0345,
+        "threshold": 0.7617,
+        "threshold_accuracy": 0.917,
+        "group_mean": {
           "R": 0.7188,
           "I": 0.6329,
           "C": 0.7621
@@ -388,26 +388,26 @@
       }
     },
     "emb:gemini-embedding-001@768": {
-      "modelo": "gemini-embedding-001",
-      "dimensiones": 768,
-      "formas": {
-        "consulta": [
+      "model": "gemini-embedding-001",
+      "dimensions": 768,
+      "shapes": {
+        "query": [
           1,
           768
         ],
-        "documentos": [
+        "documents": [
           12,
           768
         ]
       },
-      "vector_ejemplo": [
+      "sample_vector": [
         -0.0089,
         -0.0155,
         0.0145,
         -0.067,
         0.014
       ],
-      "matriz_docs": [
+      "doc_matrix": [
         [
           1.0,
           0.8355,
@@ -577,8 +577,8 @@
           1.0
         ]
       ],
-      "afirmativa": {
-        "puntajes": {
+      "affirmative": {
+        "scores": {
           "R1": 0.7147,
           "R2": 0.7457,
           "R3": 0.6975,
@@ -608,17 +608,17 @@
         ],
         "p@3": 0.667,
         "p@5": 0.8,
-        "margen": -0.0828,
-        "umbral": 0.7029,
-        "exactitud_umbral": 0.833,
-        "promedio_por_grupo": {
+        "margin": -0.0828,
+        "threshold": 0.7029,
+        "threshold_accuracy": 0.833,
+        "group_mean": {
           "R": 0.7149,
           "I": 0.6159,
           "C": 0.7124
         }
       },
-      "negada": {
-        "puntajes": {
+      "negated": {
+        "scores": {
           "R1": 0.7013,
           "R2": 0.7469,
           "R3": 0.6752,
@@ -648,10 +648,10 @@
         ],
         "p@3": 0.667,
         "p@5": 0.6,
-        "margen": -0.0348,
-        "umbral": 0.748,
-        "exactitud_umbral": 0.917,
-        "promedio_por_grupo": {
+        "margin": -0.0348,
+        "threshold": 0.748,
+        "threshold_accuracy": 0.917,
+        "group_mean": {
           "R": 0.7063,
           "I": 0.608,
           "C": 0.7507
@@ -659,26 +659,26 @@
       }
     },
     "emb:gemini-embedding-2-preview": {
-      "modelo": "gemini-embedding-2-preview",
-      "dimensiones": 3072,
-      "formas": {
-        "consulta": [
+      "model": "gemini-embedding-2-preview",
+      "dimensions": 3072,
+      "shapes": {
+        "query": [
           1,
           3072
         ],
-        "documentos": [
+        "documents": [
           12,
           3072
         ]
       },
-      "vector_ejemplo": [
+      "sample_vector": [
         -0.0308,
         0.007,
         0.0078,
         0.0158,
         0.0227
       ],
-      "matriz_docs": [
+      "doc_matrix": [
         [
           1.0,
           0.7887,
@@ -848,8 +848,8 @@
           1.0
         ]
       ],
-      "afirmativa": {
-        "puntajes": {
+      "affirmative": {
+        "scores": {
           "R1": 0.7703,
           "R2": 0.7809,
           "R3": 0.7494,
@@ -879,17 +879,17 @@
         ],
         "p@3": 0.667,
         "p@5": 0.8,
-        "margen": -0.0321,
-        "umbral": 0.7294,
-        "exactitud_umbral": 0.917,
-        "promedio_por_grupo": {
+        "margin": -0.0321,
+        "threshold": 0.7294,
+        "threshold_accuracy": 0.917,
+        "group_mean": {
           "R": 0.7551,
           "I": 0.5702,
           "C": 0.7014
         }
       },
-      "negada": {
-        "puntajes": {
+      "negated": {
+        "scores": {
           "R1": 0.6911,
           "R2": 0.7382,
           "R3": 0.6818,
@@ -919,10 +919,10 @@
         ],
         "p@3": 0.667,
         "p@5": 0.4,
-        "margen": -0.0809,
-        "umbral": 0.7792,
-        "exactitud_umbral": 0.917,
-        "promedio_por_grupo": {
+        "margin": -0.0809,
+        "threshold": 0.7792,
+        "threshold_accuracy": 0.917,
+        "group_mean": {
           "R": 0.7095,
           "I": 0.568,
           "C": 0.761
@@ -930,9 +930,9 @@
       }
     },
     "reranker": {
-      "modelo": "gemini-3.8-flash",
-      "afirmativa": {
-        "puntajes": {
+      "model": "gemini-3.8-flash",
+      "affirmative": {
+        "scores": {
           "R1": 1.0,
           "R2": 1.0,
           "R3": 0.95,
@@ -962,15 +962,15 @@
         ],
         "p@3": 1.0,
         "p@5": 1.0,
-        "margen": 0.8,
-        "umbral": 0.9,
-        "exactitud_umbral": 1.0,
-        "promedio_por_grupo": {
+        "margin": 0.8,
+        "threshold": 0.9,
+        "threshold_accuracy": 1.0,
+        "group_mean": {
           "R": 0.96,
           "I": 0.025,
           "C": 0.0667
         },
-        "motivos": {
+        "reasons": {
           "R1": "Describe el despliegue de componentes independientes usando contenedores en Kubernetes.",
           "R2": "Explica la puesta en producción por separado de servicios pequeños.",
           "R3": "Detalla el empaquetado y liberación independiente de módulos desacoplados.",
@@ -985,8 +985,8 @@
           "C3": "Rechaza dividir la aplicación y opta por publicar un ejecutable único."
         }
       },
-      "negada": {
-        "puntajes": {
+      "negated": {
+        "scores": {
           "R1": 0.1,
           "R2": 0.1,
           "R3": 0.1,
@@ -1016,15 +1016,15 @@
         ],
         "p@3": 1.0,
         "p@5": 0.6,
-        "margen": 0.85,
-        "umbral": 0.95,
-        "exactitud_umbral": 1.0,
-        "promedio_por_grupo": {
+        "margin": 0.85,
+        "threshold": 0.95,
+        "threshold_accuracy": 1.0,
+        "group_mean": {
           "R": 0.08,
           "I": 0.0,
           "C": 0.9667
         },
-        "motivos": {
+        "reasons": {
           "R1": "Describe una arquitectura basada en contenedores independientes y no un monolito.",
           "R2": "Describe explícitamente una arquitectura de servicios divididos, contraria al monolito.",
           "R3": "Describe módulos desacoplados e independientes típicos de microservicios.",
