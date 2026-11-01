@@ -58,6 +58,24 @@ python ejercicio-chunking/document_processor.py
 - La colección usa distancia **coseno** (`hnsw:space`), la métrica recomendada para embeddings de texto.
 - `content_id(text)`: genera IDs deterministas (hash del contenido) para que `upsert` pueda actualizar.
 
+### Manejo de errores
+
+Cada operación contra la base (abrir la colección, `upsert_documents`, `semantic_search` y `delete_by_id`) está dentro de un `try...except`. Los fallos se registran con `logging` y se relanzan como una única excepción, `VectorMemoryError`, que conserva el error original en `__cause__`. Así, quien usa la clase captura un solo tipo de error y no un traceback crudo de Chroma.
+
+Se capturan tres familias de errores (`DATABASE_ERRORS`):
+
+| Excepción | Cuándo ocurre |
+|---|---|
+| `chromadb.errors.ChromaError` | Clase base de todos los errores de Chroma: `NotFoundError` (colección borrada), `DuplicateIDError`, `InvalidArgumentError`, `InternalError` (fallos de disco o almacenamiento). En Chroma 1.x no existe `DatabaseError`: este es su equivalente. |
+| `ValueError` | Validación del cliente: un filtro `where` mal armado o metadatos con tipos no soportados. |
+| `OSError` | La carpeta de persistencia no se puede leer o escribir (permisos, disco lleno). |
+
+Que las listas de `upsert_documents` tengan distinto largo sigue lanzando `ValueError`, porque es un error de programación y se detecta antes de tocar la base. Al final, el script provoca dos errores a propósito (IDs duplicados y un filtro inválido) para mostrar que se manejan.
+
+### Observación: `upsert` mezcla la metadata
+
+Al volver a correr el script, `doc1` seguía teniendo `version: 2` de la corrida anterior, aunque el primer `upsert` solo manda `{"source": "news"}`. El `upsert` de Chroma reemplaza el texto y el vector, pero **mezcla las claves de metadata**: las que no se envían quedan como estaban. Para reemplazar la metadata completa hay que hacer `delete` + `upsert`, o enviar todas las claves.
+
 ```bash
 python ejercicio-chromadb-crud/vector_memory.py
 ```
