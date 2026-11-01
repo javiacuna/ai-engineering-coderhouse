@@ -45,3 +45,21 @@ El script corre tres configuraciones: 40/10 (5 chunks, ninguno de más de 40 tok
 ```bash
 python ejercicio-chunking/document_processor.py
 ```
+
+## Ejercicio: Persistencia local con ChromaDB (CRUD)
+
+📁 [`ejercicio-chromadb-crud/`](ejercicio-chromadb-crud/)
+
+`VectorMemoryManager` es una memoria vectorial que se guarda en disco con `chromadb.PersistentClient`:
+
+- `upsert_documents`: inserta o actualiza (`collection.upsert`). Si se repite un ID, actualiza el documento y su vector en lugar de duplicarlo.
+- `semantic_search(query_text, n_results, where=None)`: búsqueda por similitud (`collection.query`) con filtro opcional por metadatos. Devuelve una lista de diccionarios con `id`, `document`, `metadata` y `distance`.
+- `delete_by_id(ids)`: borra documentos y sus vectores.
+- La colección usa distancia **coseno** (`hnsw:space`), la métrica recomendada para embeddings de texto.
+- `content_id(text)`: genera IDs deterministas (hash del contenido) para que `upsert` pueda actualizar.
+
+```bash
+python ejercicio-chromadb-crud/vector_memory.py
+```
+
+La primera vez, ChromaDB descarga su modelo de embeddings (all-MiniLM-L6-v2). La base se guarda en `ejercicio-chromadb-crud/chroma_db/`, que está excluida del repo en `.gitignore`.

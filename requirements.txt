@@ -10,3 +10,4 @@ scikit-learn
 numpy
 tiktoken
 langchain-text-splitters
+chromadb
