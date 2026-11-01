@@ -81,3 +81,19 @@ python ejercicio-chromadb-crud/vector_memory.py
 ```
 
 La primera vez, ChromaDB descarga su modelo de embeddings (all-MiniLM-L6-v2). La base se guarda en `ejercicio-chromadb-crud/chroma_db/`, que está excluida del repo en `.gitignore`.
+
+## Pre-entrega 3: Sistema de recuperación semántica local (RAG)
+
+📁 [`pre-entrega-3-rag-local/`](pre-entrega-3-rag-local/)
+
+Sistema RAG end-to-end que hace lo siguiente:
+
+- Indexa documentos `.md` en ChromaDB, con chunks de 500 tokens y 50 de overlap y una ingesta incremental que no reindexa lo que no cambió.
+- Recupera los 4 fragmentos más relevantes para cada pregunta.
+- Genera la respuesta con una cadena LCEL y `PydanticOutputParser`, usando solo esos fragmentos.
+- Responde "No lo sé" cuando la información no está en los documentos, y devuelve referencias que el modelo no puede inventar.
+
+```bash
+cd pre-entrega-3-rag-local
+python main.py
+```

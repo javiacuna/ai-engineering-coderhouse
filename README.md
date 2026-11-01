@@ -1,6 +1,6 @@
 # AI Engineering — Coderhouse
 
-> **English summary.** Exercises and project milestones from Coderhouse's *AI Engineering* course, in Python 3.12+: async orchestration with `asyncio`, a unified async LLM client for OpenAI / Anthropic / Gemini with Pydantic validation and streaming, LangChain LCEL chains with structured output, retries and fallbacks, an evaluation of embeddings vs. keyword search with an LLM re-ranker, and token-based document chunking. Code and comments are in English; the documentation is in Spanish because the course is taught in Spanish.
+> **English summary.** Exercises and project milestones from Coderhouse's *AI Engineering* course, in Python 3.12+: async orchestration with `asyncio`, a unified async LLM client for OpenAI / Anthropic / Gemini with Pydantic validation and streaming, LangChain LCEL chains with structured output, retries and fallbacks, an evaluation of embeddings vs. keyword search with an LLM re-ranker, token-based document chunking, a ChromaDB vector memory and a local end-to-end RAG system with grounded answers. Code and comments are in English; the documentation is in Spanish because the course is taught in Spanish.
 
 Ejercicios y pre-entregas del curso **AI Engineering** de Coderhouse, en Python 3.12+.
 
@@ -10,7 +10,7 @@ Ejercicios y pre-entregas del curso **AI Engineering** de Coderhouse, en Python 
 |---|---|---|
 | [01](modulo-01-asyncio-y-clientes/) | Asincronía con asyncio y abstracción de clientes LLM | Orquestador concurrente · Cliente LLM (ejercicio) · **Pre-entrega 1: Unified Async LLM Client** |
 | [02](modulo-02-langchain-lcel/) | Orquestación con LangChain (LCEL) | LCEL asíncrono · Validación estructurada con retry y fallback · **Pre-entrega 2: Pipeline de procesamiento validado** |
-| [03](modulo-03-embeddings-vector-db/) | Embeddings y similitud semántica | Embeddings y similitud (informe PDF) · Limpieza y chunking por tokens |
+| [03](modulo-03-embeddings-vector-db/) | Embeddings, chunking y bases vectoriales | Embeddings y similitud (informe PDF) · Limpieza y chunking por tokens · CRUD con ChromaDB · **Pre-entrega 3: RAG local con ChromaDB** |
 
 ## Cómo correr los ejemplos
 

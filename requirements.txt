@@ -11,3 +11,4 @@ numpy
 tiktoken
 langchain-text-splitters
 chromadb
+langchain-chroma
