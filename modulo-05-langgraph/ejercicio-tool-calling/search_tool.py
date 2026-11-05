@@ -1,8 +1,13 @@
+"""Tool definition only: the knowledge-base search tool an agent can call.
+
+Demo: demo.py · Tests: tests/test_search_tool.py
+"""
+
 import asyncio
 import logging
 from typing import List, Union
 
-from pydantic import BaseModel, Field, ValidationError, field_validator
+from pydantic import BaseModel, Field, field_validator
 from langchain_core.tools import tool
 
 logger = logging.getLogger("tools.search")
@@ -77,24 +82,3 @@ async def search_knowledge_base(query: str, limit: int = 3) -> Union[List[str], 
         return "No se encontraron documentos relevantes para esta consulta."
     return results
 
-
-if __name__ == "__main__":
-    # 1. The contract the LLM sees: name, description and argument schema
-    print(search_knowledge_base.name, search_knowledge_base.args)
-
-    # 2. Valid call
-    print(asyncio.run(search_knowledge_base.ainvoke({"query": "políticas de vacaciones", "limit": 2})))
-
-    # 3. Invalid limit: Pydantic rejects it before the function runs
-    try:
-        asyncio.run(search_knowledge_base.ainvoke({"query": "políticas de vacaciones", "limit": 50}))
-    except ValidationError as e:
-        print(f"Validation error: {e.errors()[0]['loc']} -> {e.errors()[0]['msg']}")
-
-    # 4. Infrastructure failure: the error comes back as a message, the program keeps running
-    class BrokenVectorDB:
-        async def similarity_search(self, query: str, k: int):
-            raise ConnectionError("vector store unreachable")
-
-    db = BrokenVectorDB()
-    print(asyncio.run(search_knowledge_base.ainvoke({"query": "políticas de vacaciones"})))
