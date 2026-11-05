@@ -50,3 +50,30 @@ dimension: 1536
 namespace 'dev-environment': 3 vectors
 total_vector_count: 3
 ```
+
+## Ejercicio: Ingesta masiva y metadatos avanzados
+
+📁 [`ejercicio-ingesta-masiva/`](ejercicio-ingesta-masiva/)
+
+`IngestionPipeline` carga documentos en lotes y busca filtrando por metadatos. Trabaja con un índice simulado (`MockPineconeIndex`), así que no necesita cuenta de Pinecone.
+
+- `create_metadata`: arma los metadatos de cada documento (`category`, `author`, `ingested_at` en formato ISO y `char_count`). Los valida con un modelo Pydantic, `DocumentMetadata`, con `extra="forbid"`: es la **interfaz estricta** que evita el *schema drift*. Si un proceso intenta guardar `date_created` en lugar de `ingested_at`, falla en vez de guardar un campo que después ningún filtro encuentra. La categoría se normaliza a minúsculas, para que `"Legal"` y `"legal"` coincidan con el mismo filtro.
+- `process_and_upsert_batches`: recorre los documentos de a `batch_size` y hace **un `upsert` por lote**, no uno por vector. Cada llamada está dentro de un `try/except`.
+- `search_by_category`: consulta con un filtro rígido (*hard filter*), `{"category": {"$eq": "legal"}}`. La búsqueda semántica solo compara los vectores de esa categoría.
+
+```bash
+python modulo-04-vector-db-cloud/ejercicio-ingesta-masiva/batch_ingestion.py
+```
+
+Salida con 5 documentos (2 `legal`, 2 `hr` y 1 `finanzas`) y `batch_size=2`:
+
+```
+2
+2
+1
+Total processed: 5
+query(top_k=5, filter={'category': {'$eq': 'legal'}})
+Results: {'matches': []}
+```
+
+Son 3 llamadas a `upsert`, con 2, 2 y 1 vectores. El índice simulado devuelve `matches` vacío: lo que se verifica es que el filtro llegue bien armado.
