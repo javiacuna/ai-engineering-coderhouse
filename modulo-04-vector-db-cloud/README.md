@@ -55,25 +55,87 @@ total_vector_count: 3
 
 📁 [`ejercicio-ingesta-masiva/`](ejercicio-ingesta-masiva/)
 
-`IngestionPipeline` carga documentos en lotes y busca filtrando por metadatos. Trabaja con un índice simulado (`MockPineconeIndex`), así que no necesita cuenta de Pinecone.
+`IngestionPipeline` carga documentos en lotes y busca filtrando por metadatos. Trabaja con un índice simulado (`MockPineconeIndex`), así que no necesita cuenta de Pinecone. El mock guarda los vectores por ID y aplica los filtros `$eq` y `$and`, para poder verificar la deduplicación y el aislamiento entre clientes.
 
-- `create_metadata`: arma los metadatos de cada documento (`category`, `author`, `ingested_at` en formato ISO y `char_count`). Los valida con un modelo Pydantic, `DocumentMetadata`, con `extra="forbid"`: es la **interfaz estricta** que evita el *schema drift*. Si un proceso intenta guardar `date_created` en lugar de `ingested_at`, falla en vez de guardar un campo que después ningún filtro encuentra. La categoría se normaliza a minúsculas, para que `"Legal"` y `"legal"` coincidan con el mismo filtro.
-- `process_and_upsert_batches`: recorre los documentos de a `batch_size` y hace **un `upsert` por lote**, no uno por vector. Cada llamada está dentro de un `try/except`.
-- `search_by_category`: consulta con un filtro rígido (*hard filter*), `{"category": {"$eq": "legal"}}`. La búsqueda semántica solo compara los vectores de esa categoría.
+### Metadatos con interfaz estricta
+
+`create_metadata` arma y valida los metadatos con un modelo Pydantic, `DocumentMetadata`:
+
+| Campo | Para qué sirve |
+|---|---|
+| `tenant_id` | Dueño del documento (aislamiento multi-tenant) |
+| `category`, `author` | Filtros de negocio. La categoría y el tenant se normalizan a minúsculas, para que `"Legal"` y `"legal"` coincidan con el mismo filtro. |
+| `ingested_at` | Fecha y hora de la ingesta (ISO 8601) |
+| `char_count` | Tamaño del texto |
+| `content_hash` | SHA-256 del texto, para detectar duplicados |
+
+El modelo usa `extra="forbid"`: es la **interfaz estricta** que evita el *schema drift*. Si un proceso intenta guardar `date_created` en lugar de `ingested_at`, falla en vez de guardar un campo que después ningún filtro encuentra.
+
+### Aislamiento multi-tenant
+
+`search_by_category(query_vector, category, tenant_id)` aplica un **filtro combinado**:
+
+```python
+{"$and": [{"tenant_id": {"$eq": "acme"}}, {"category": {"$eq": "legal"}}]}
+```
+
+`tenant_id` es **obligatorio**: sin él, la función lanza un error, así que ninguna consulta puede devolver documentos de otro cliente. En la prueba, `globex` también tiene un documento `legal`, y la búsqueda de `acme` no lo devuelve. Para separar todavía más a los clientes, Pinecone permite usar un **namespace por tenant**, que aísla los datos a nivel de índice.
+
+### Deduplicación
+
+Cada vector tiene un **ID determinista**, `sha256(tenant_id + hash del texto)`, en lugar de un `uuid4` aleatorio:
+
+- Si se vuelve a cargar la misma tanda de documentos, el `upsert` **sobrescribe** los vectores en lugar de duplicarlos.
+- Los documentos repetidos dentro de una misma carga se saltean.
+- El tenant forma parte del ID: si dos clientes suben el mismo texto, cada uno conserva su copia.
+
+### Resiliencia: reintentos y registro de lotes fallidos
+
+Cada lote se sube con `_upsert_with_retry`:
+
+- Ante un **error temporal** (red o timeout; con el SDK real, también `RateLimitError` y `ServiceError`), reintenta hasta 3 veces con *backoff* exponencial (0.5 s y después 1 s).
+- Si el lote sigue fallando, o el error es permanente, **no aborta la ingesta**: lo registra en el log y en `IngestionReport.failed_batches` (posición, IDs y error), y sigue con el lote siguiente. Así se pueden reprocesar solo los lotes fallidos.
+
+`process_and_upsert_batches` devuelve un `IngestionReport` con `processed`, `duplicates_skipped` y `failed_batches`.
 
 ```bash
 python modulo-04-vector-db-cloud/ejercicio-ingesta-masiva/batch_ingestion.py
 ```
 
-Salida con 5 documentos (2 `legal`, 2 `hr` y 1 `finanzas`) y `batch_size=2`:
+### Salida
 
 ```
+== 1) Ingestion (batch_size=2)
 2
 2
 1
-Total processed: 5
-query(top_k=5, filter={'category': {'$eq': 'legal'}})
-Results: {'matches': []}
+Total processed: 5 | vectors in the index: 5
+
+== 2) Same load again (deduplication)
+2
+2
+1
+Processed: 5 | duplicates skipped: 1 | vectors in the index: 5 (still 5)
+
+== 3) Search 'legal' for tenant 'acme' (combined filter)
+query(top_k=5, filter={'$and': [{'tenant_id': {'$eq': 'acme'}}, {'category': {'$eq': 'legal'}}]})
+   acme | legal | 709f1a25...
+   1 match(es): globex's legal document is not visible to acme
+
+== 4) Temporary error: the batch is retried with backoff
+WARNING | Batch 1: simulated network error (attempt 1/3), retrying in 0.1 s
+2
+2
+1
+Processed: 5 | failed batches: 0
+
+== 5) Error that persists: the batch is recorded and the rest continues
+WARNING | Batch 1: simulated network error (attempt 1/3), retrying in 0.1 s
+WARNING | Batch 1: simulated network error (attempt 2/3), retrying in 0.2 s
+ERROR | Batch 1 failed: ConnectionError: simulated network error
+2
+1
+Processed: 3 | failed batches: [(0, 2, 'ConnectionError: simulated network error')]
 ```
 
-Son 3 llamadas a `upsert`, con 2, 2 y 1 vectores. El índice simulado devuelve `matches` vacío: lo que se verifica es que el filtro llegue bien armado.
+La ingesta original da 3 llamadas a `upsert` (2, 2 y 1 vectores) y un total de 5. La segunda carga agrega un documento repetido: se saltea, y el índice sigue teniendo 5 vectores.
