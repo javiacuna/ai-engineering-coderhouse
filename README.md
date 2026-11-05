@@ -12,7 +12,7 @@ Ejercicios y pre-entregas del curso **AI Engineering** de Coderhouse, en Python 
 | [02](modulo-02-langchain-lcel/) | Orquestación con LangChain (LCEL) | LCEL asíncrono · Validación estructurada con retry y fallback · **Pre-entrega 2: Pipeline de procesamiento validado** |
 | [03](modulo-03-embeddings-vector-db/) | Embeddings, chunking y bases vectoriales | Embeddings y similitud (informe PDF) · Limpieza y chunking por tokens · CRUD con ChromaDB · **Pre-entrega 3: RAG local con ChromaDB** |
 | [04](modulo-04-vector-db-cloud/) | Bases vectoriales en la nube | Pinecone Serverless: índice, namespaces y metadatos · Ingesta masiva multi-tenant · **Pre-entrega 4: RAG escalable con Pinecone y búsqueda híbrida** |
-| [05](modulo-05-langgraph/) | Agentes con LangGraph | Diseño de un grafo de soporte multinivel (estado, nodos, aristas condicionales y ciclos) |
+| [05](modulo-05-langgraph/) | Agentes con LangGraph | Diseño de un grafo de soporte (estado, aristas condicionales, human-in-the-loop) · Tool calling seguro · Ciclo ReAct con checkpoints · **Pre-entrega 5: Agente ReAct con memoria persistente en SQLite** |
 
 ## Cómo correr los ejemplos
 

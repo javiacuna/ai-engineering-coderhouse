@@ -113,3 +113,20 @@ python -m pytest -q
 - que el mismo thread recuerda el contexto (8 mensajes después de dos turnos, y "¿Y en Londres?" usa la herramienta);
 - que un thread nuevo no tiene memoria (2 mensajes, y el agente no entiende la pregunta);
 - que el checkpointer guarda un checkpoint por paso (la base del *time travel*).
+
+## Pre-entrega 5: Agente de razonamiento cíclico con memoria persistente
+
+📁 [`pre-entrega-5-agente-react/`](pre-entrega-5-agente-react/)
+
+Agente ReAct que consulta clientes y pedidos con tres herramientas:
+
+- Decide por sí mismo cuáles usar y puede encadenarlas.
+- Se corrige cuando una herramienta devuelve un error, y pide aclaraciones cuando falta información.
+- Recuerda cada sesión (`thread_id`) en una base SQLite que sobrevive a reinicios.
+
+Incluye la traza ReAct de una corrida real, en `.json` y `.log`.
+
+```bash
+cd pre-entrega-5-agente-react
+python main.py
+```

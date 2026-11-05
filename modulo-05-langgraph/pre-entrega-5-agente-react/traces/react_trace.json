@@ -1,0 +1,405 @@
+{
+  "generated_at": "2026-11-05T20:45:41",
+  "model": "gemini-flash-lite-latest",
+  "recursion_limit": 10,
+  "checkpointer": "AsyncSqliteSaver (data/checkpoints.sqlite)",
+  "turns": [
+    {
+      "thread_id": "sesion-1",
+      "question": "¿Cuántos pedidos tuvo el cliente 102 y cuál fue el total?",
+      "steps": [
+        {
+          "type": "accion",
+          "tool": "get_customer_orders",
+          "args": {
+            "customer_id": 102
+          },
+          "result": null,
+          "text": null
+        },
+        {
+          "type": "observacion",
+          "tool": "get_customer_orders",
+          "args": null,
+          "result": {
+            "cliente": {
+              "id": 102,
+              "name": "Lucía Fernández",
+              "city": "Córdoba"
+            },
+            "pedidos": 3,
+            "pedidos_cancelados": 0,
+            "total": 14500,
+            "moneda": "ARS",
+            "detalle": [
+              {
+                "pedido_id": 5001,
+                "fecha": "2026-08-14",
+                "estado": "entregado",
+                "monto": 6000
+              },
+              {
+                "pedido_id": 5007,
+                "fecha": "2026-09-30",
+                "estado": "entregado",
+                "monto": 3500
+              },
+              {
+                "pedido_id": 5012,
+                "fecha": "2026-10-22",
+                "estado": "en_camino",
+                "monto": 5000
+              }
+            ]
+          },
+          "text": null
+        },
+        {
+          "type": "respuesta",
+          "tool": null,
+          "args": null,
+          "result": null,
+          "text": "El cliente 102 (Lucía Fernández) tuvo 3 pedidos y el monto total gastado es de $14.500."
+        }
+      ],
+      "answer": "El cliente 102 (Lucía Fernández) tuvo 3 pedidos y el monto total gastado es de $14.500.",
+      "tool_calls": 1,
+      "messages_in_thread": 4,
+      "duration_seconds": 2.99,
+      "error": null
+    },
+    {
+      "thread_id": "sesion-1",
+      "question": "¿Y el último?",
+      "steps": [
+        {
+          "type": "accion",
+          "tool": "get_order_detail",
+          "args": {
+            "order_id": 5012
+          },
+          "result": null,
+          "text": null
+        },
+        {
+          "type": "observacion",
+          "tool": "get_order_detail",
+          "args": null,
+          "result": {
+            "pedido_id": 5012,
+            "cliente_id": 102,
+            "fecha": "2026-10-22",
+            "estado": "en_camino",
+            "productos": [
+              {
+                "product": "Soporte para notebook",
+                "quantity": 1,
+                "unit_price": 2500
+              },
+              {
+                "product": "Hub USB-C",
+                "quantity": 1,
+                "unit_price": 2500
+              }
+            ],
+            "monto": 5000,
+            "moneda": "ARS"
+          },
+          "text": null
+        },
+        {
+          "type": "respuesta",
+          "tool": null,
+          "args": null,
+          "result": null,
+          "text": "El último pedido (ID 5012) fue realizado el 22/10/2026, está en estado **en camino** y su monto total es de $5.000. \n\nIncluye los siguientes productos:\n- 1 Soporte para notebook ($2.500 c/u)\n- 1 Hub USB-C ($2.500 c/u)"
+        }
+      ],
+      "answer": "El último pedido (ID 5012) fue realizado el 22/10/2026, está en estado **en camino** y su monto total es de $5.000. \n\nIncluye los siguientes productos:\n- 1 Soporte para notebook ($2.500 c/u)\n- 1 Hub USB-C ($2.500 c/u)",
+      "tool_calls": 1,
+      "messages_in_thread": 8,
+      "duration_seconds": 2.11,
+      "error": null
+    },
+    {
+      "thread_id": "sesion-1",
+      "question": "¿Quién gastó más en total: ese cliente o Diego Pereyra?",
+      "steps": [
+        {
+          "type": "accion",
+          "tool": "search_customers",
+          "args": {
+            "name": "Diego Pereyra"
+          },
+          "result": null,
+          "text": null
+        },
+        {
+          "type": "observacion",
+          "tool": "search_customers",
+          "args": null,
+          "result": {
+            "coincidencias": 1,
+            "clientes": [
+              {
+                "id": 104,
+                "name": "Diego Pereyra",
+                "city": "Córdoba"
+              }
+            ]
+          },
+          "text": null
+        },
+        {
+          "type": "accion",
+          "tool": "get_customer_orders",
+          "args": {
+            "customer_id": 104
+          },
+          "result": null,
+          "text": null
+        },
+        {
+          "type": "observacion",
+          "tool": "get_customer_orders",
+          "args": null,
+          "result": {
+            "cliente": {
+              "id": 104,
+              "name": "Diego Pereyra",
+              "city": "Córdoba"
+            },
+            "pedidos": 1,
+            "pedidos_cancelados": 0,
+            "total": 850000,
+            "moneda": "ARS",
+            "detalle": [
+              {
+                "pedido_id": 5010,
+                "fecha": "2026-10-18",
+                "estado": "entregado",
+                "monto": 850000
+              }
+            ]
+          },
+          "text": null
+        },
+        {
+          "type": "respuesta",
+          "tool": null,
+          "args": null,
+          "result": null,
+          "text": "Gastó más **Diego Pereyra**, con un total de $850.000 en su pedido (el cliente 102, Lucía Fernández, gastó $14.500)."
+        }
+      ],
+      "answer": "Gastó más **Diego Pereyra**, con un total de $850.000 en su pedido (el cliente 102, Lucía Fernández, gastó $14.500).",
+      "tool_calls": 2,
+      "messages_in_thread": 14,
+      "duration_seconds": 3.13,
+      "error": null
+    },
+    {
+      "thread_id": "sesion-2",
+      "question": "¿Cuánto gastó García en total?",
+      "steps": [
+        {
+          "type": "accion",
+          "tool": "search_customers",
+          "args": {
+            "name": "García"
+          },
+          "result": null,
+          "text": null
+        },
+        {
+          "type": "observacion",
+          "tool": "search_customers",
+          "args": null,
+          "result": {
+            "coincidencias": 2,
+            "clientes": [
+              {
+                "id": 101,
+                "name": "Martín García",
+                "city": "Rosario"
+              },
+              {
+                "id": 103,
+                "name": "Sofía García",
+                "city": "Mendoza"
+              }
+            ],
+            "aviso": "Hay más de un cliente con ese nombre: pedile al usuario que aclare cuál."
+          },
+          "text": null
+        },
+        {
+          "type": "respuesta",
+          "tool": null,
+          "args": null,
+          "result": null,
+          "text": "Hay más de un cliente con ese apellido. ¿Te referís a **Martín García** (de Rosario) o a **Sofía García** (de Mendoza)?"
+        }
+      ],
+      "answer": "Hay más de un cliente con ese apellido. ¿Te referís a **Martín García** (de Rosario) o a **Sofía García** (de Mendoza)?",
+      "tool_calls": 1,
+      "messages_in_thread": 4,
+      "duration_seconds": 1.55,
+      "error": null
+    },
+    {
+      "thread_id": "sesion-2",
+      "question": "El de Rosario",
+      "steps": [
+        {
+          "type": "accion",
+          "tool": "get_customer_orders",
+          "args": {
+            "customer_id": 101
+          },
+          "result": null,
+          "text": null
+        },
+        {
+          "type": "observacion",
+          "tool": "get_customer_orders",
+          "args": null,
+          "result": {
+            "cliente": {
+              "id": 101,
+              "name": "Martín García",
+              "city": "Rosario"
+            },
+            "pedidos": 2,
+            "pedidos_cancelados": 1,
+            "total": 98000,
+            "moneda": "ARS",
+            "detalle": [
+              {
+                "pedido_id": 5002,
+                "fecha": "2026-07-02",
+                "estado": "entregado",
+                "monto": 98000
+              },
+              {
+                "pedido_id": 5009,
+                "fecha": "2026-10-05",
+                "estado": "cancelado",
+                "monto": 120000
+              }
+            ]
+          },
+          "text": null
+        },
+        {
+          "type": "respuesta",
+          "tool": null,
+          "args": null,
+          "result": null,
+          "text": "Martín García gastó un total de **$98.000** (tiene un pedido entregado de $98.000 y otro de $120.000 que fue cancelado)."
+        }
+      ],
+      "answer": "Martín García gastó un total de **$98.000** (tiene un pedido entregado de $98.000 y otro de $120.000 que fue cancelado).",
+      "tool_calls": 1,
+      "messages_in_thread": 8,
+      "duration_seconds": 1.78,
+      "error": null
+    },
+    {
+      "thread_id": "sesion-3",
+      "question": "Mostrame los pedidos del cliente 999, es Sofía García",
+      "steps": [
+        {
+          "type": "accion",
+          "tool": "get_customer_orders",
+          "args": {
+            "customer_id": 999
+          },
+          "result": null,
+          "text": null
+        },
+        {
+          "type": "observacion",
+          "tool": "get_customer_orders",
+          "args": null,
+          "result": {
+            "error": "El cliente 999 no existe.",
+            "sugerencia": "Si el usuario mencionó un nombre, buscá el ID con search_customers; si no, pedile el ID correcto."
+          },
+          "text": null
+        },
+        {
+          "type": "accion",
+          "tool": "search_customers",
+          "args": {
+            "name": "Sofía García"
+          },
+          "result": null,
+          "text": null
+        },
+        {
+          "type": "observacion",
+          "tool": "search_customers",
+          "args": null,
+          "result": {
+            "coincidencias": 1,
+            "clientes": [
+              {
+                "id": 103,
+                "name": "Sofía García",
+                "city": "Mendoza"
+              }
+            ]
+          },
+          "text": null
+        },
+        {
+          "type": "accion",
+          "tool": "get_customer_orders",
+          "args": {
+            "customer_id": 103
+          },
+          "result": null,
+          "text": null
+        },
+        {
+          "type": "observacion",
+          "tool": "get_customer_orders",
+          "args": null,
+          "result": {
+            "cliente": {
+              "id": 103,
+              "name": "Sofía García",
+              "city": "Mendoza"
+            },
+            "pedidos": 1,
+            "pedidos_cancelados": 0,
+            "total": 39500,
+            "moneda": "ARS",
+            "detalle": [
+              {
+                "pedido_id": 5004,
+                "fecha": "2026-09-11",
+                "estado": "entregado",
+                "monto": 39500
+              }
+            ]
+          },
+          "text": null
+        },
+        {
+          "type": "respuesta",
+          "tool": null,
+          "args": null,
+          "result": null,
+          "text": "Sofía García (cliente ID 103) tiene 1 pedido registrado por un total de $39.500:\n\n* **Pedido #5004** (11/09/2026) - Estado: entregado - Monto: $39.500"
+        }
+      ],
+      "answer": "Sofía García (cliente ID 103) tiene 1 pedido registrado por un total de $39.500:\n\n* **Pedido #5004** (11/09/2026) - Estado: entregado - Monto: $39.500",
+      "tool_calls": 3,
+      "messages_in_thread": 8,
+      "duration_seconds": 3.91,
+      "error": null
+    }
+  ]
+}

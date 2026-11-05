@@ -17,3 +17,4 @@ langchain-community
 langchain-classic
 rank-bm25
 langgraph
+langgraph-checkpoint-sqlite
