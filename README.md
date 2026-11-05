@@ -11,7 +11,7 @@ Ejercicios y pre-entregas del curso **AI Engineering** de Coderhouse, en Python 
 | [01](modulo-01-asyncio-y-clientes/) | Asincronía con asyncio y abstracción de clientes LLM | Orquestador concurrente · Cliente LLM (ejercicio) · **Pre-entrega 1: Unified Async LLM Client** |
 | [02](modulo-02-langchain-lcel/) | Orquestación con LangChain (LCEL) | LCEL asíncrono · Validación estructurada con retry y fallback · **Pre-entrega 2: Pipeline de procesamiento validado** |
 | [03](modulo-03-embeddings-vector-db/) | Embeddings, chunking y bases vectoriales | Embeddings y similitud (informe PDF) · Limpieza y chunking por tokens · CRUD con ChromaDB · **Pre-entrega 3: RAG local con ChromaDB** |
-| [04](modulo-04-vector-db-cloud/) | Bases vectoriales en la nube | Pinecone Serverless: índice, namespaces y metadatos |
+| [04](modulo-04-vector-db-cloud/) | Bases vectoriales en la nube | Pinecone Serverless: índice, namespaces y metadatos · Ingesta masiva multi-tenant · **Pre-entrega 4: RAG escalable con Pinecone y búsqueda híbrida** |
 
 ## Cómo correr los ejemplos
 

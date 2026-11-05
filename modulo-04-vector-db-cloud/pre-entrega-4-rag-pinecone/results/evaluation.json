@@ -1,0 +1,258 @@
+{
+  "k": 5,
+  "embedding_model": "gemini-embedding-001",
+  "vector_weight": 0.5,
+  "summary": {
+    "vector": {
+      "recall": 1.0,
+      "precision": 0.48,
+      "precision_ceiling": 0.5599999999999999,
+      "mrr": 1.0
+    },
+    "bm25": {
+      "recall": 1.0,
+      "precision": 0.4,
+      "precision_ceiling": 0.5599999999999999,
+      "mrr": 1.0
+    },
+    "hybrid": {
+      "recall": 1.0,
+      "precision": 0.44000000000000006,
+      "precision_ceiling": 0.5599999999999999,
+      "mrr": 1.0
+    }
+  },
+  "questions": {
+    "vector": [
+      {
+        "question": "¿Qué excepción tengo que capturar cuando se vence el plazo de asyncio.timeout()?",
+        "expected": "03-timeouts-y-cancelacion",
+        "retrieved_doc_ids": [
+          "03-timeouts-y-cancelacion",
+          "03-timeouts-y-cancelacion",
+          "06-codigo-bloqueante",
+          "06-codigo-bloqueante",
+          "02-tareas-gather-taskgroup"
+        ],
+        "recall": 1.0,
+        "precision": 0.4,
+        "precision_ceiling": 0.4,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "¿Cómo hago para que no se ejecuten más de 5 pedidos a una API al mismo tiempo?",
+        "expected": "04-sincronizacion",
+        "retrieved_doc_ids": [
+          "04-sincronizacion",
+          "03-timeouts-y-cancelacion",
+          "05-colas-productor-consumidor",
+          "05-colas-productor-consumidor",
+          "06-codigo-bloqueante"
+        ],
+        "recall": 1.0,
+        "precision": 0.6,
+        "precision_ceiling": 1.0,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "Si una tarea falla dentro de un TaskGroup, ¿qué pasa con las otras tareas del grupo?",
+        "expected": "02-tareas-gather-taskgroup",
+        "retrieved_doc_ids": [
+          "02-tareas-gather-taskgroup",
+          "02-tareas-gather-taskgroup",
+          "03-timeouts-y-cancelacion",
+          "03-timeouts-y-cancelacion",
+          "06-codigo-bloqueante"
+        ],
+        "recall": 1.0,
+        "precision": 0.4,
+        "precision_ceiling": 0.4,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "Mi programa asíncrono se queda trabado cuando llamo a requests.get dentro de una corutina, ¿cómo lo soluciono?",
+        "expected": "06-codigo-bloqueante",
+        "retrieved_doc_ids": [
+          "06-codigo-bloqueante",
+          "01-corutinas-y-event-loop",
+          "01-corutinas-y-event-loop",
+          "02-tareas-gather-taskgroup",
+          "06-codigo-bloqueante"
+        ],
+        "recall": 1.0,
+        "precision": 0.4,
+        "precision_ceiling": 0.4,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "¿Para qué sirven task_done() y join() en una asyncio.Queue?",
+        "expected": "05-colas-productor-consumidor",
+        "retrieved_doc_ids": [
+          "05-colas-productor-consumidor",
+          "05-colas-productor-consumidor",
+          "05-colas-productor-consumidor",
+          "04-sincronizacion",
+          "04-sincronizacion"
+        ],
+        "recall": 1.0,
+        "precision": 0.6,
+        "precision_ceiling": 0.6,
+        "reciprocal_rank": 1.0
+      }
+    ],
+    "bm25": [
+      {
+        "question": "¿Qué excepción tengo que capturar cuando se vence el plazo de asyncio.timeout()?",
+        "expected": "03-timeouts-y-cancelacion",
+        "retrieved_doc_ids": [
+          "03-timeouts-y-cancelacion",
+          "03-timeouts-y-cancelacion",
+          "06-codigo-bloqueante",
+          "02-tareas-gather-taskgroup",
+          "02-tareas-gather-taskgroup"
+        ],
+        "recall": 1.0,
+        "precision": 0.4,
+        "precision_ceiling": 0.4,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "¿Cómo hago para que no se ejecuten más de 5 pedidos a una API al mismo tiempo?",
+        "expected": "04-sincronizacion",
+        "retrieved_doc_ids": [
+          "04-sincronizacion",
+          "01-corutinas-y-event-loop",
+          "03-timeouts-y-cancelacion",
+          "04-sincronizacion",
+          "02-tareas-gather-taskgroup"
+        ],
+        "recall": 1.0,
+        "precision": 0.4,
+        "precision_ceiling": 1.0,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "Si una tarea falla dentro de un TaskGroup, ¿qué pasa con las otras tareas del grupo?",
+        "expected": "02-tareas-gather-taskgroup",
+        "retrieved_doc_ids": [
+          "02-tareas-gather-taskgroup",
+          "02-tareas-gather-taskgroup",
+          "01-corutinas-y-event-loop",
+          "01-corutinas-y-event-loop",
+          "05-colas-productor-consumidor"
+        ],
+        "recall": 1.0,
+        "precision": 0.4,
+        "precision_ceiling": 0.4,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "Mi programa asíncrono se queda trabado cuando llamo a requests.get dentro de una corutina, ¿cómo lo soluciono?",
+        "expected": "06-codigo-bloqueante",
+        "retrieved_doc_ids": [
+          "06-codigo-bloqueante",
+          "01-corutinas-y-event-loop",
+          "05-colas-productor-consumidor",
+          "04-sincronizacion",
+          "03-timeouts-y-cancelacion"
+        ],
+        "recall": 1.0,
+        "precision": 0.2,
+        "precision_ceiling": 0.4,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "¿Para qué sirven task_done() y join() en una asyncio.Queue?",
+        "expected": "05-colas-productor-consumidor",
+        "retrieved_doc_ids": [
+          "05-colas-productor-consumidor",
+          "05-colas-productor-consumidor",
+          "05-colas-productor-consumidor",
+          "03-timeouts-y-cancelacion",
+          "01-corutinas-y-event-loop"
+        ],
+        "recall": 1.0,
+        "precision": 0.6,
+        "precision_ceiling": 0.6,
+        "reciprocal_rank": 1.0
+      }
+    ],
+    "hybrid": [
+      {
+        "question": "¿Qué excepción tengo que capturar cuando se vence el plazo de asyncio.timeout()?",
+        "expected": "03-timeouts-y-cancelacion",
+        "retrieved_doc_ids": [
+          "03-timeouts-y-cancelacion",
+          "03-timeouts-y-cancelacion",
+          "06-codigo-bloqueante",
+          "02-tareas-gather-taskgroup",
+          "06-codigo-bloqueante"
+        ],
+        "recall": 1.0,
+        "precision": 0.4,
+        "precision_ceiling": 0.4,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "¿Cómo hago para que no se ejecuten más de 5 pedidos a una API al mismo tiempo?",
+        "expected": "04-sincronizacion",
+        "retrieved_doc_ids": [
+          "04-sincronizacion",
+          "03-timeouts-y-cancelacion",
+          "01-corutinas-y-event-loop",
+          "05-colas-productor-consumidor",
+          "04-sincronizacion"
+        ],
+        "recall": 1.0,
+        "precision": 0.6,
+        "precision_ceiling": 1.0,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "Si una tarea falla dentro de un TaskGroup, ¿qué pasa con las otras tareas del grupo?",
+        "expected": "02-tareas-gather-taskgroup",
+        "retrieved_doc_ids": [
+          "02-tareas-gather-taskgroup",
+          "02-tareas-gather-taskgroup",
+          "03-timeouts-y-cancelacion",
+          "03-timeouts-y-cancelacion",
+          "01-corutinas-y-event-loop"
+        ],
+        "recall": 1.0,
+        "precision": 0.4,
+        "precision_ceiling": 0.4,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "Mi programa asíncrono se queda trabado cuando llamo a requests.get dentro de una corutina, ¿cómo lo soluciono?",
+        "expected": "06-codigo-bloqueante",
+        "retrieved_doc_ids": [
+          "06-codigo-bloqueante",
+          "01-corutinas-y-event-loop",
+          "04-sincronizacion",
+          "01-corutinas-y-event-loop",
+          "02-tareas-gather-taskgroup"
+        ],
+        "recall": 1.0,
+        "precision": 0.2,
+        "precision_ceiling": 0.4,
+        "reciprocal_rank": 1.0
+      },
+      {
+        "question": "¿Para qué sirven task_done() y join() en una asyncio.Queue?",
+        "expected": "05-colas-productor-consumidor",
+        "retrieved_doc_ids": [
+          "05-colas-productor-consumidor",
+          "05-colas-productor-consumidor",
+          "05-colas-productor-consumidor",
+          "02-tareas-gather-taskgroup",
+          "02-tareas-gather-taskgroup"
+        ],
+        "recall": 1.0,
+        "precision": 0.6,
+        "precision_ceiling": 0.6,
+        "reciprocal_rank": 1.0
+      }
+    ]
+  }
+}

@@ -139,3 +139,18 @@ Processed: 3 | failed batches: [(0, 2, 'ConnectionError: simulated network error
 ```
 
 La ingesta original da 3 llamadas a `upsert` (2, 2 y 1 vectores) y un total de 5. La segunda carga agrega un documento repetido: se saltea, y el índice sigue teniendo 5 vectores.
+
+## Pre-entrega 4: Sistema RAG escalable en la nube con Pinecone
+
+📁 [`pre-entrega-4-rag-pinecone/`](pre-entrega-4-rag-pinecone/)
+
+- Ingesta incremental de documentos técnicos a Pinecone Serverless, con el texto original y metadatos avanzados en cada vector.
+- Recuperador híbrido que combina la búsqueda vectorial de Pinecone con BM25 mediante un `EnsembleRetriever`.
+- Evaluación con Precision@5, Recall@5 y MRR sobre un golden set de 5 preguntas.
+
+```bash
+cd pre-entrega-4-rag-pinecone
+python setup_index.py
+python ingest.py
+python evaluate.py
+```

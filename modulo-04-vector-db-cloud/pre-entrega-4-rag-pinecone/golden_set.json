@@ -1,0 +1,28 @@
+[
+  {
+    "pregunta": "¿Qué excepción tengo que capturar cuando se vence el plazo de asyncio.timeout()?",
+    "documento_id_esperado": "03-timeouts-y-cancelacion",
+    "tipo": "término técnico exacto"
+  },
+  {
+    "pregunta": "¿Cómo hago para que no se ejecuten más de 5 pedidos a una API al mismo tiempo?",
+    "documento_id_esperado": "04-sincronizacion",
+    "documentos_relacionados": ["05-colas-productor-consumidor"],
+    "tipo": "paráfrasis (no menciona Semaphore)"
+  },
+  {
+    "pregunta": "Si una tarea falla dentro de un TaskGroup, ¿qué pasa con las otras tareas del grupo?",
+    "documento_id_esperado": "02-tareas-gather-taskgroup",
+    "tipo": "nombre propio de la API"
+  },
+  {
+    "pregunta": "Mi programa asíncrono se queda trabado cuando llamo a requests.get dentro de una corutina, ¿cómo lo soluciono?",
+    "documento_id_esperado": "06-codigo-bloqueante",
+    "tipo": "síntoma + término técnico"
+  },
+  {
+    "pregunta": "¿Para qué sirven task_done() y join() en una asyncio.Queue?",
+    "documento_id_esperado": "05-colas-productor-consumidor",
+    "tipo": "identificadores de la API"
+  }
+]

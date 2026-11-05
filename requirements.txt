@@ -13,3 +13,6 @@ langchain-text-splitters
 chromadb
 langchain-chroma
 pinecone
+langchain-community
+langchain-classic
+rank-bm25
