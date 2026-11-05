@@ -16,3 +16,4 @@ pinecone
 langchain-community
 langchain-classic
 rank-bm25
+langgraph

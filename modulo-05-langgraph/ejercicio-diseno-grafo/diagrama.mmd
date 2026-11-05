@@ -1,0 +1,28 @@
+flowchart TD
+    START([START])
+    TRIAGE["<b>Triage</b><br/>Clasifica la duda<br/>→ category"]
+    SEARCH["<b>Search_Knowledge</b><br/>Busca en la base de conocimiento (RAG)<br/>→ attempts += 1, solution"]
+    EVAL["<b>Evaluator</b><br/>¿La solución responde la duda?<br/>→ is_solution_valid"]
+    HUMAN["<b>Human_Support</b><br/>Deriva a una persona<br/>→ is_escalated = True"]
+    END_NODE([END])
+
+    START --> TRIAGE
+    TRIAGE -- "category != 'complex'" --> SEARCH
+    TRIAGE -. "category == 'complex'<br/>(caso crítico)" .-> HUMAN
+    SEARCH --> EVAL
+    EVAL -- "1) is_solution_valid == True" --> END_NODE
+    EVAL -- "2) attempts >= 3" --> HUMAN
+    EVAL -- "3) si no: retry<br/>(attempts < 3)" --> SEARCH
+    HUMAN --> END_NODE
+
+    STATE["<b>SupportState (TypedDict)</b><br/>messages: Annotated[list[BaseMessage], add_messages]<br/>category: str<br/>attempts: int<br/>solution: str | None<br/>is_solution_valid: bool<br/>is_escalated: bool"]
+    STATE ~~~ TRIAGE
+
+    classDef terminal fill:#e8e8e8,stroke:#555,color:#111
+    classDef node fill:#eef3ff,stroke:#3b5bdb,color:#111
+    classDef human fill:#fff1e6,stroke:#d9480f,color:#111
+    classDef state fill:#f8f9fa,stroke:#868e96,stroke-dasharray:4 3,color:#111,text-align:left
+    class START,END_NODE terminal
+    class TRIAGE,SEARCH,EVAL node
+    class HUMAN human
+    class STATE state
