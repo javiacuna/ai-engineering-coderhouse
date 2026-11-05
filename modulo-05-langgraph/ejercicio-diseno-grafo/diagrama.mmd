@@ -2,8 +2,8 @@ flowchart TD
     START([START])
     TRIAGE["<b>Triage</b><br/>Clasifica la duda<br/>→ category"]
     SEARCH["<b>Search_Knowledge</b><br/>Busca en la base de conocimiento (RAG)<br/>→ attempts += 1, solution"]
-    EVAL["<b>Evaluator</b><br/>¿La solución responde la duda?<br/>→ is_solution_valid"]
-    HUMAN["<b>Human_Support</b><br/>Deriva a una persona<br/>→ is_escalated = True"]
+    EVAL["<b>Evaluator</b><br/>¿La solución responde la duda?<br/>→ is_solution_valid<br/>→ failed_attempts += motivo"]
+    HUMAN["<b>Human_Support</b><br/>⏸ interrupt(): pausa el grafo y le pasa<br/>el contexto (failed_attempts) a una persona<br/>▶ Command(resume=respuesta)<br/>→ is_escalated = True"]
     END_NODE([END])
 
     START --> TRIAGE
@@ -15,7 +15,7 @@ flowchart TD
     EVAL -- "3) si no: retry<br/>(attempts < 3)" --> SEARCH
     HUMAN --> END_NODE
 
-    STATE["<b>SupportState (TypedDict)</b><br/>messages: Annotated[list[BaseMessage], add_messages]<br/>category: str<br/>attempts: int<br/>solution: str | None<br/>is_solution_valid: bool<br/>is_escalated: bool"]
+    STATE["<b>SupportState (TypedDict)</b><br/>messages: Annotated[list[BaseMessage], add_messages]<br/>category: str<br/>attempts: int<br/>solution: str | None<br/>is_solution_valid: bool<br/>failed_attempts: Annotated[list[str], operator.add]<br/>is_escalated: bool<br/>resolved_by: str | None<br/><i>checkpointer: InMemorySaver (por thread_id)</i>"]
     STATE ~~~ TRIAGE
 
     classDef terminal fill:#e8e8e8,stroke:#555,color:#111
