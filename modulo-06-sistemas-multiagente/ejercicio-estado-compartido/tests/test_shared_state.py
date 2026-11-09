@@ -112,3 +112,61 @@ def test_independent_runs_overlap_in_time(monkeypatch):
     start = time.perf_counter()
     asyncio.run(three_runs())
     assert time.perf_counter() - start < 0.8                  # ~0.3 s total, not 3 x 0.3 s
+
+
+# ---------------------------------------------------------------- external call failures
+def test_network_failure_is_handled_without_stopping_the_graph():
+    final = asyncio.run(run_example(0.92, name="red", simulate_failure=True))
+    assert final["researcher_output"] is None
+    assert "falló la fuente externa" in final["errors"][0] and "ResearchSourceError" in final["errors"][0]
+    assert final["reviewer_output"] is not None and not final["reviewer_output"].is_approved   # the reviewer still ran
+
+
+def test_slow_source_times_out(monkeypatch):
+    monkeypatch.setattr(shared_state, "RESEARCH_DELAY_SECONDS", 0.5)
+    monkeypatch.setattr(shared_state, "RESEARCH_TIMEOUT_SECONDS", 0.05)
+    final = asyncio.run(run_example(0.92))
+    assert "no respondió" in final["errors"][0]
+    assert not final["reviewer_output"].is_approved
+
+
+def test_unexpected_exception_in_the_source_is_handled(monkeypatch):
+    async def broken(topic, config):
+        raise RuntimeError("respuesta corrupta del proveedor")
+    monkeypatch.setattr(shared_state, "fetch_research", broken)
+    final = asyncio.run(run_example(0.92))
+    assert "RuntimeError" in final["errors"][0]
+
+
+# ---------------------------------------------------------------- defensive error message
+def test_validation_message_handles_empty_and_nested_locations():
+    from pydantic import BaseModel, model_validator
+
+    class WholeModelCheck(BaseModel):
+        a: int
+
+        @model_validator(mode="after")
+        def fail(self):
+            raise ValueError("regla de todo el modelo")      # model-level error: loc == ()
+
+    with pytest.raises(ValidationError) as empty_loc:
+        WholeModelCheck(a=1)
+    assert empty_loc.value.errors()[0]["loc"] == ()
+    assert shared_state.describe_validation_error(empty_loc.value).startswith("artefacto: ")
+
+    with pytest.raises(ValidationError) as nested:
+        ResearchArtifact(topic="t", findings=["ok", 3], confidence_score=0.5)    # loc == ("findings", 1)
+    assert shared_state.describe_validation_error(nested.value).startswith("findings.1: ")
+
+
+# ---------------------------------------------------------------- concurrency in main()
+def test_main_runs_the_scenarios_concurrently(monkeypatch, capsys):
+    monkeypatch.setattr(shared_state, "RESEARCH_DELAY_SECONDS", 0.3)
+    start = time.perf_counter()
+    asyncio.run(shared_state.main())
+    elapsed = time.perf_counter() - start
+    assert elapsed < 0.8                                       # 4 scenarios x 0.3 s would be 1.2 s in sequence
+    out = capsys.readouterr().out
+    assert out.count("Nodo 'revisor' finalizado.") == len(shared_state.SCENARIOS)
+    # Interleaved: every scenario starts researching before the first one finishes
+    assert out.rindex("--- Investigando") < out.index("Nodo 'investigador' finalizado.")

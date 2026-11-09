@@ -90,10 +90,19 @@ START → investigador → revisor → END
 - **Contratos:** `ResearchArtifact` (`topic`, `findings` con al menos un hallazgo no vacío y `confidence_score` entre 0 y 1) y `ReviewArtifact` (`is_approved`, `feedback`). Los datos se validan **antes** de entrar al estado.
 - **Aislamiento de escritura:** cada nodo devuelve solo su parte del estado (`researcher_output` o `reviewer_output`). Además, el decorador `@owns(...)` declara qué claves puede escribir cada nodo, y lanza `StateOwnershipError` si un nodo intenta pisar la parte de otro: el aislamiento queda **garantizado**, no solo documentado.
 - **Errores compartidos sin pisarse:** `errors: Annotated[list[str], operator.add]`. Cualquier nodo puede **agregar** su error y el reducer concatena. Es la alternativa segura a una lista global con `.append()` (el "Error 1" de la unidad).
-- **Validación sin cortes:** si el investigador produce un `confidence_score` de 1.5, el `ValidationError` se captura **dentro del nodo**. El artefacto inválido nunca entra al estado, el error queda registrado y el revisor rechaza por falta de datos válidos. El grafo nunca queda "en el limbo" (el "Error 2").
+- **La llamada externa, protegida:** la investigación está separada en `fetch_research()`, que simula la llamada a un LLM o a una API de búsqueda. Corre dentro de `asyncio.timeout(5)` y de un `try/except` que cubre **la llamada completa**, no solo la validación:
+
+  | Falla | Qué pasa |
+  |---|---|
+  | `ValidationError` (por ejemplo, `confidence_score=1.5`) | El artefacto inválido nunca entra al estado |
+  | `TimeoutError` (la fuente tarda más de 5 s) | Se registra que la fuente no respondió |
+  | Error de red o del proveedor (`ResearchSourceError`, `ConnectionError`, errores de la API) | Se registra el tipo y el mensaje |
+
+  En todos los casos, el error queda en `errors`, el investigador devuelve `researcher_output=None` y el revisor igual se ejecuta y rechaza por falta de datos válidos. **Un fallo de red no detiene el orquestador** ni deja el grafo "en el limbo" (el "Error 2").
+- **Mensaje de error defensivo:** `describe_validation_error()` no asume que el error tiene una ubicación simple. Si `loc` viene vacío (un error de validación de todo el modelo), usa "artefacto"; si es anidado (`("findings", 1)`), lo muestra como `findings.1`.
+- **Concurrencia real:** `main()` corre los 4 escenarios con `asyncio.gather(..., return_exceptions=True)`. Las esperas de 1 segundo se **superponen**: el total es ~1 s en lugar de ~4 s. Cada línea lleva el nombre de su escenario (`[alta]`, `[red caída]`) para distinguir las salidas intercaladas, y una falla inesperada en un escenario no cancela los demás.
 - **Dependencias:** la arista `investigador → revisor` garantiza que el revisor lee el estado recién cuando el investigador terminó de escribir.
-- **Asincronía:** la investigación simula una espera con `await asyncio.sleep(1)`. Mientras tanto, el event loop queda libre: tres corridas en paralelo tardan lo mismo que una (lo verifica un test).
-- **Configuración fuera del estado:** el `confidence_score` simulado de cada escenario se pasa por `config["configurable"]`, no por el estado, porque es un parámetro de prueba y no un dato del dominio.
+- **Configuración fuera del estado:** el `confidence_score` simulado y la falla de red de cada escenario se pasan por `config["configurable"]`, no por el estado, porque son parámetros de prueba y no datos del dominio.
 
 ```bash
 cd ejercicio-estado-compartido
@@ -101,33 +110,34 @@ python shared_state.py
 python -m pytest -q
 ```
 
-Salida:
+Salida (las líneas de los 4 escenarios se intercalan porque corren a la vez):
 
 ```
-===== Escenario: confianza alta (confidence_score=0.92) =====
---- Investigando: Sistemas Multi-Agente ---
-Nodo 'investigador' finalizado.
---- Revisando resultados ---
-Nodo 'revisor' finalizado.
-Revisión: APROBADA — Aprobado: 3 hallazgos con confianza 0.92.
-
-===== Escenario: confianza baja (confidence_score=0.6) =====
+[alta] --- Investigando: Sistemas Multi-Agente ---
+[baja] --- Investigando: Sistemas Multi-Agente ---
+[inválido] --- Investigando: Sistemas Multi-Agente ---
+[red caída] --- Investigando: Sistemas Multi-Agente ---
+[inválido]     Error manejado → investigador: artefacto inválido (confidence_score: Input should be less than or equal to 1)
+[red caída]     Error manejado → investigador: falló la fuente externa (ResearchSourceError: la API de búsqueda no respondió (conexión rechazada))
+[alta] Nodo 'investigador' finalizado.
 [...]
-Revisión: RECHAZADA — Rechazado: la confianza 0.60 no supera 0.8. Se necesitan más fuentes que respalden los hallazgos.
+[alta] Revisión: APROBADA — Aprobado: 3 hallazgos con confianza 0.92.
+[baja] Revisión: RECHAZADA — Rechazado: la confianza 0.60 no supera 0.8. Se necesitan más fuentes que respalden los hallazgos.
+[inválido] Revisión: RECHAZADA — No hay resultados de investigación válidos para revisar.
+[red caída] Revisión: RECHAZADA — No hay resultados de investigación válidos para revisar.
 
-===== Escenario: score inválido (confidence_score=1.5) =====
---- Investigando: Sistemas Multi-Agente ---
-    ValidationError manejado → investigador: artefacto inválido (confidence_score: Input should be less than or equal to 1)
-Nodo 'investigador' finalizado.
---- Revisando resultados ---
-Nodo 'revisor' finalizado.
-Revisión: RECHAZADA — No hay resultados de investigación válidos para revisar.
-Errores registrados: ['investigador: artefacto inválido (confidence_score: Input should be less than or equal to 1)']
+===== Resumen (1.0 s en total; en secuencia serían ~4 s) =====
+[alta] APROBADA | errores: 0
+[baja] RECHAZADA | errores: 0
+[inválido] RECHAZADA | errores: 1
+[red caída] RECHAZADA | errores: 1
 ```
 
-**Tests** (11):
+**Tests** (16):
 
 - **Contratos:** el score fuera de rango y los hallazgos vacíos se rechazan.
 - **Escenarios:** aprobado, rechazado y el umbral estricto (0.8 no alcanza); un score inválido se maneja sin cortar.
+- **Llamada externa:** una caída de red, un timeout y una excepción inesperada se manejan, y el revisor igual se ejecuta.
+- **Mensaje defensivo:** funciona con `loc` vacío y con `loc` anidado.
 - **Escritura:** cada nodo devuelve solo su clave; un nodo que escribe la clave de otro es rechazado; los errores se agregan sin pisarse.
-- **Asincronía:** tres corridas concurrentes se superponen en el tiempo.
+- **Concurrencia:** `main()` corre los escenarios en paralelo (tarda menos que la suma de las esperas y las salidas se intercalan), y también se superponen tres corridas independientes del grafo.
