@@ -76,3 +76,58 @@ Secuencia: supervisor → fin
 - **Pedidos especiales:** uno fuera de alcance termina sin especialistas, y uno ambiguo recibe una pregunta de aclaración.
 - **Especialistas:** el Analista responde según el tema pedido; el Escritor usa el análisis; la detección del tema compara palabras completas.
 - **Resguardos:** una ruta inválida termina sin romper el grafo, y un supervisor que nunca dice `FINALIZAR` se corta por el `recursion_limit`.
+
+## Ejercicio: Estado compartido y comunicación asíncrona
+
+📁 [`ejercicio-estado-compartido/`](ejercicio-estado-compartido/)
+
+Dos agentes asíncronos, `investigador` y `revisor`, se comunican **solo a través del estado del grafo**, con artefactos validados por Pydantic.
+
+```
+START → investigador → revisor → END
+```
+
+- **Contratos:** `ResearchArtifact` (`topic`, `findings` con al menos un hallazgo no vacío y `confidence_score` entre 0 y 1) y `ReviewArtifact` (`is_approved`, `feedback`). Los datos se validan **antes** de entrar al estado.
+- **Aislamiento de escritura:** cada nodo devuelve solo su parte del estado (`researcher_output` o `reviewer_output`). Además, el decorador `@owns(...)` declara qué claves puede escribir cada nodo, y lanza `StateOwnershipError` si un nodo intenta pisar la parte de otro: el aislamiento queda **garantizado**, no solo documentado.
+- **Errores compartidos sin pisarse:** `errors: Annotated[list[str], operator.add]`. Cualquier nodo puede **agregar** su error y el reducer concatena. Es la alternativa segura a una lista global con `.append()` (el "Error 1" de la unidad).
+- **Validación sin cortes:** si el investigador produce un `confidence_score` de 1.5, el `ValidationError` se captura **dentro del nodo**. El artefacto inválido nunca entra al estado, el error queda registrado y el revisor rechaza por falta de datos válidos. El grafo nunca queda "en el limbo" (el "Error 2").
+- **Dependencias:** la arista `investigador → revisor` garantiza que el revisor lee el estado recién cuando el investigador terminó de escribir.
+- **Asincronía:** la investigación simula una espera con `await asyncio.sleep(1)`. Mientras tanto, el event loop queda libre: tres corridas en paralelo tardan lo mismo que una (lo verifica un test).
+- **Configuración fuera del estado:** el `confidence_score` simulado de cada escenario se pasa por `config["configurable"]`, no por el estado, porque es un parámetro de prueba y no un dato del dominio.
+
+```bash
+cd ejercicio-estado-compartido
+python shared_state.py
+python -m pytest -q
+```
+
+Salida:
+
+```
+===== Escenario: confianza alta (confidence_score=0.92) =====
+--- Investigando: Sistemas Multi-Agente ---
+Nodo 'investigador' finalizado.
+--- Revisando resultados ---
+Nodo 'revisor' finalizado.
+Revisión: APROBADA — Aprobado: 3 hallazgos con confianza 0.92.
+
+===== Escenario: confianza baja (confidence_score=0.6) =====
+[...]
+Revisión: RECHAZADA — Rechazado: la confianza 0.60 no supera 0.8. Se necesitan más fuentes que respalden los hallazgos.
+
+===== Escenario: score inválido (confidence_score=1.5) =====
+--- Investigando: Sistemas Multi-Agente ---
+    ValidationError manejado → investigador: artefacto inválido (confidence_score: Input should be less than or equal to 1)
+Nodo 'investigador' finalizado.
+--- Revisando resultados ---
+Nodo 'revisor' finalizado.
+Revisión: RECHAZADA — No hay resultados de investigación válidos para revisar.
+Errores registrados: ['investigador: artefacto inválido (confidence_score: Input should be less than or equal to 1)']
+```
+
+**Tests** (11):
+
+- **Contratos:** el score fuera de rango y los hallazgos vacíos se rechazan.
+- **Escenarios:** aprobado, rechazado y el umbral estricto (0.8 no alcanza); un score inválido se maneja sin cortar.
+- **Escritura:** cada nodo devuelve solo su clave; un nodo que escribe la clave de otro es rechazado; los errores se agregan sin pisarse.
+- **Asincronía:** tres corridas concurrentes se superponen en el tiempo.
