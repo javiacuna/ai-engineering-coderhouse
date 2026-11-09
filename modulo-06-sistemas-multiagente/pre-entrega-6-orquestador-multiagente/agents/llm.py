@@ -5,6 +5,7 @@ the specialists do narrow tasks with tools, so they get a light, cheap one.
 Each role gets a list of models: the primary and, optionally, a fallback used if the primary fails.
 """
 
+import asyncio
 import json
 import logging
 import os
@@ -18,6 +19,8 @@ logger = logging.getLogger("orchestrator.llm")
 
 LLM_TIMEOUT = 60
 LLM_MAX_RETRIES = 2
+# Free tiers limit requests per minute (HTTP 429): wait and retry once before moving on
+RATE_LIMIT_WAIT_SECONDS = float(os.getenv("RATE_LIMIT_WAIT_SECONDS", 30))
 T = TypeVar("T")
 
 Role = Literal["supervisor", "worker"]
@@ -47,15 +50,35 @@ def chat_models(role: Role) -> list[BaseChatModel]:
             for n in names]
 
 
+def is_rate_limit(error: Exception) -> bool:
+    text = f"{type(error).__name__} {error}"
+    return "RateLimit" in text or "429" in text or "RESOURCE_EXHAUSTED" in text
+
+
 async def with_fallback(models: list[Any], call: Callable[[Any], Awaitable[T]], what: str) -> T:
-    """Runs `call` with the first model; if it raises, tries the next one. Re-raises the last error."""
+    """Runs `call` with the first model; if it raises, tries the next one. Re-raises the last error.
+
+    A rate limit (429) gets one retry on the same model after RATE_LIMIT_WAIT_SECONDS: switching to a
+    fallback of the same provider usually hits the same per-minute quota.
+    """
     last_error: Exception | None = None
+    seen: set[str] = set()
     for model in models:
-        try:
-            return await call(model)
-        except Exception as e:   # provider errors: 503 overloaded, timeout, quota...
-            last_error = e
-            logger.warning("%s failed with %s: %s", what, getattr(model, "model", type(model).__name__), str(e)[:200])
+        name = getattr(model, "model", None) or str(id(model))
+        if name in seen:   # the fallback is the same model as the primary: retrying it right away adds nothing
+            continue
+        seen.add(name)
+        for attempt in (1, 2):
+            try:
+                return await call(model)
+            except Exception as e:   # provider errors: 503 overloaded, timeout, quota...
+                last_error = e
+                logger.warning("%s failed with %s: %s", what, name, str(e)[:200])
+                if attempt == 1 and is_rate_limit(e) and RATE_LIMIT_WAIT_SECONDS > 0:
+                    logger.warning("%s: rate limit, waiting %.0f s before retrying", what, RATE_LIMIT_WAIT_SECONDS)
+                    await asyncio.sleep(RATE_LIMIT_WAIT_SECONDS)
+                    continue
+                break
     raise last_error or RuntimeError(f"{what}: no models configured")
 
 

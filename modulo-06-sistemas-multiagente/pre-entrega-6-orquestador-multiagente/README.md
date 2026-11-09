@@ -41,7 +41,7 @@ pre-entrega-6-orquestador-multiagente/
 ├── demo.ipynb                # Demostración del flujo de delegación
 ├── graph.png / graph.mmd     # Diagrama del grafo
 ├── traces/                   # Trazas de ejecución en JSON
-├── tests/                    # 13 tests con modelos guionados (sin API)
+├── tests/                    # 15 tests con modelos guionados (sin API)
 ├── requirements.txt
 └── .env.example
 ```
@@ -59,7 +59,7 @@ python main.py "¿Qué opinan los clientes del BassBoom 3 y cuánto cuesta?"
 python -m pytest -q                     # tests (sin API)
 ```
 
-**Notebook:** abrí `demo.ipynb` en VS Code y elegí el kernel del `.venv`, o ejecutalo desde la terminal:
+**Notebook:** abrí `demo.ipynb` en VS Code y elegí el kernel del `.venv`, o ejecutalo desde la terminal. Con el plan gratuito de Gemini, esperá un minuto después de correr `main.py`, por el límite de pedidos por minuto:
 
 ```bash
 jupyter nbconvert --to notebook --execute --inplace demo.ipynb
@@ -196,6 +196,54 @@ Ningún agente recibe todo el historial:
 
 Las fuentes son simuladas (`data/sources.py`), como permite la consigna. Reemplazarlas por Tavily, o por el índice de Pinecone de la pre-entrega 4, implica cambiar solo esas dos herramientas.
 
+## Resultados (corridas reales)
+
+### Corrida normal (`python main.py`, Gemini)
+
+```
+🧭 supervisor (paso 1) [investigación✗ análisis✗ consistencia✗ respuesta✗] → researcher
+   instrucción: Busca reseñas (al menos 3 por producto) y precios (al menos 1 por producto) para los auriculares SoundMax Pro y AudioZen X.
+🔎 researcher (ronda 1) | herramientas: search_reviews(SoundMax Pro), search_prices(SoundMax Pro), search_reviews(AudioZen X), search_prices(AudioZen X)
+
+🧭 supervisor (paso 2) [investigación✓ análisis✗ consistencia✗ respuesta✗] → analyst
+   instrucción: Analizar las 6 reseñas y los precios obtenidos para SoundMax Pro y AudioZen X, calculando el sentimiento, los puntajes y el precio promedio de cada producto.
+📊 analyst (ronda 1) | herramientas: compute_statistics(SoundMax Pro), analyze_sentiment(SoundMax Pro), compute_statistics(AudioZen X), analyze_sentiment(AudioZen X)
+
+🧭 supervisor (paso 3) [investigación✓ análisis✓ consistencia✓ respuesta✗] → synthesizer
+✍️ synthesizer (ronda 1)
+
+🧭 supervisor (paso 4) [investigación✓ análisis✓ consistencia✓ respuesta✓] → FINISH
+
+✅ Respuesta final (12.3 s):
+El SoundMax Pro tiene mejor sentimiento en las reseñas, registrando un puntaje de 0.33 y un promedio de 4.17
+estrellas, frente al AudioZen X, que tiene un puntaje de sentimiento de 0.0 y un promedio de 2.83 estrellas.
+El precio promedio del SoundMax Pro es de $182.000, mientras que el del AudioZen X es de $88.667.
+Existe una tensión en los datos: el modelo más económico (AudioZen X) es el peor valorado y presenta serias dudas
+sobre su durabilidad, mientras que el más costoso ofrece mejor calidad general a pesar de duplicar su valor.
+Te recomiendo el SoundMax Pro porque, aunque es más caro, garantiza mayor satisfacción en sonido, batería y comodidad.
+```
+
+- **Delegación:** el supervisor siguió el orden investigación → análisis → síntesis **por su cuenta**, sin que tuviera que intervenir ninguna regla del sistema. Cada paso avanzó cuando la rúbrica marcó completo el anterior.
+- **Instrucciones:** el supervisor les pasó a los especialistas instrucciones concretas, con los productos, la cantidad mínima de reseñas y qué calcular.
+- **Datos:** todos los números de la respuesta (4.17 y 2.83 estrellas, sentimiento 0.33 y 0.0, $182.000 y $88.667) salen de las herramientas, y coinciden con los tests.
+- **Tensión en los datos:** el sintetizador explicó la tensión entre precio y valoración, como pide su prompt.
+
+La traza completa está en [`traces/last_run.json`](traces/last_run.json).
+
+### Prueba de resiliencia (real): cuota de Gemini agotada
+
+Al ejecutar el notebook justo después de `main.py`, el plan gratuito de Gemini devolvió `429 RESOURCE_EXHAUSTED` (límite de pedidos por minuto). Esa traza quedó guardada en [`traces/rate_limit_run.json`](traces/rate_limit_run.json):
+
+| Paso | Qué pasó |
+|---|---|
+| 1 | Supervisor → researcher, que completó la investigación |
+| 2 | Supervisor → analyst, que **falló por el 429**. El error quedó registrado en su `Contribution` y el grafo siguió |
+| 3 | El supervisor vio el error y lo mandó a **reintentar**, en su segunda y última ronda: volvió a fallar |
+| 4 | **También falló el LLM del supervisor**: decidió el plan determinístico de la rúbrica. Con las rondas del analista agotadas, pasó a la síntesis |
+| 5 | El sintetizador también recibió el 429 y devolvió un aviso con los datos disponibles. El grafo **terminó ordenadamente**, sin excepciones ni bucles |
+
+A partir de esta prueba se agregó un **reintento con espera ante un 429** (`with_fallback` espera `RATE_LIMIT_WAIT_SECONDS`, 30 s por defecto, y reintenta una vez el mismo modelo). También dejó de reintentarse dos veces seguidas el mismo modelo cuando el de respaldo coincide con el principal. Con el plan gratuito conviene esperar un minuto entre corridas.
+
 ## Tests
 
 ```bash
@@ -212,3 +260,6 @@ Usan un supervisor y especialistas **guionados** (devuelven decisiones y llamada
 - **Datos:** un producto inexistente se informa sin inventar datos.
 - **Estado:** el control de escritura por dueño funciona, y la rúbrica detecta productos faltantes.
 - **Herramientas:** alias y sugerencias; combinación de rondas; sentimiento con negaciones; el analista no ve productos que no se investigaron.
+- **Límites de tasa:** ante un 429, se espera y se reintenta una vez el mismo modelo; un respaldo igual al principal no se reintenta.
+
+`create_react_agent` muestra un aviso de deprecación: en LangGraph 1.x se movió a `langchain.agents.create_agent`. Se usa igual porque es lo que pide la consigna, y el aviso se silencia en `pytest.ini`.

@@ -198,3 +198,39 @@ def test_analyst_tools_only_see_the_researched_products():
     stats = tools["compute_statistics"].invoke({"product": "AudioZen X"})
     assert stats["avg_rating"] == 2.83 and stats["review_count"] == 6
     assert "error" in tools["analyze_sentiment"].invoke({"product": "SoundMax Pro"})   # not researched
+
+
+# ---------------------------------------------------------------- rate limits
+def test_rate_limit_waits_and_retries_the_same_model(monkeypatch):
+    import agents.llm as llm
+    monkeypatch.setattr(llm, "RATE_LIMIT_WAIT_SECONDS", 0.01)
+    attempts = []
+
+    async def call(model):
+        attempts.append(model)
+        if len(attempts) == 1:
+            raise RuntimeError("429 RESOURCE_EXHAUSTED: You exceeded your current quota")
+        return "ok"
+
+    class Model:
+        model = "gemini-flash-lite-latest"
+
+    same = Model()
+    assert asyncio.run(llm.with_fallback([same, same], call, "test")) == "ok"
+    assert len(attempts) == 2                                   # waited and retried once, no duplicate fallback
+
+
+def test_duplicate_fallback_is_not_retried_on_other_errors():
+    import agents.llm as llm
+    attempts = []
+
+    async def call(model):
+        attempts.append(model)
+        raise ConnectionError("down")
+
+    class Model:
+        model = "same-model"
+
+    with pytest.raises(ConnectionError):
+        asyncio.run(llm.with_fallback([Model(), Model()], call, "test"))
+    assert len(attempts) == 1
