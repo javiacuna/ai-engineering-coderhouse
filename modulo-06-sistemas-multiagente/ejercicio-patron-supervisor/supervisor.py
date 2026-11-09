@@ -14,10 +14,11 @@ Set LLM_PROVIDER=openai and OPENAI_API_KEY to use gpt-4o-mini instead.
 import asyncio
 import logging
 import os
+import re
 from typing import Annotated, Any, Literal, TypedDict
 
 from dotenv import load_dotenv
-from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 from langchain_core.runnables import Runnable
 from langgraph.errors import GraphRecursionError
 from langgraph.graph import StateGraph, END
@@ -37,6 +38,7 @@ LLM_MAX_RETRIES = 2
 class AgentState(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]   # shared history; add_messages appends
     next: str                                                # the supervisor's last routing decision
+    reason: str                                              # why it decided it (for the trace)
 
 
 class Route(TypedDict):
@@ -55,10 +57,16 @@ Especialistas:
 - Escritor: redacta el informe a partir de los resultados del Analista.
 
 Reglas, en este orden (mirá los mensajes con nombre "Analista" o "Escritor" en el historial):
-1. Si el Analista todavía no respondió -> "Analista".
-2. Si el Analista ya respondió y el Escritor todavía no -> "Escritor".
-3. Si el Escritor ya entregó el informe -> "FINALIZAR". No vuelvas a llamar a nadie.
-4. Si el pedido del usuario no tiene que ver con un informe -> "FINALIZAR"."""
+1. Pedido fuera de alcance: si el usuario no pide un informe ni un análisis (un saludo, una pregunta
+   general) -> "FINALIZAR", sin llamar a nadie.
+2. Pedido ambiguo: si pide un informe pero no dice SOBRE QUÉ tema o datos (por ejemplo "hacé un reporte",
+   "necesito un informe"), o el tema no es medible (ventas, clientes, inventario, costos, etc.) -> "FINALIZAR"
+   sin llamar a nadie, y en "reason" escribí la pregunta que hay que hacerle al usuario para aclararlo.
+   Ante la duda entre analizar o aclarar, aclarar: es más barato preguntar que analizar lo que no se pidió.
+3. Si el Analista todavía no respondió -> "Analista".
+4. Si el Analista ya respondió y el Escritor todavía no -> "Escritor".
+5. Si el Escritor ya entregó el informe -> "FINALIZAR". No vuelvas a llamar a nadie.
+"""
 
 
 # ---------------------------------------------------------------------------
@@ -97,18 +105,63 @@ def make_supervisor_node(router: Runnable):
             # Defensive: an invalid answer ends the run instead of routing to a node that does not exist
             logger.warning("Invalid supervisor decision %r: finishing", decision)
             next_agent = "FINALIZAR"
-        logger.info("supervisor -> %s (%s)", next_agent, decision.get("reason", "") if isinstance(decision, dict) else "")
-        return {"next": next_agent}
+        reason = decision.get("reason", "") if isinstance(decision, dict) else ""
+        logger.info("supervisor -> %s (%s)", next_agent, reason)
+        update: dict[str, Any] = {"next": next_agent, "reason": reason}
+        specialists_worked = any(getattr(m, "name", None) in ("Analista", "Escritor") for m in state["messages"])
+        if next_agent == "FINALIZAR" and not specialists_worked:
+            # Ambiguous or out-of-scope request: answer with the question / reason instead of ending silently
+            update["messages"] = [AIMessage(content=reason or "¿Sobre qué tema necesitás el informe?", name="supervisor")]
+        return update
 
     return supervisor_node
 
 
-# Nodos especialistas (ya implementados para este ejercicio)
+# Nodos especialistas
+# Simulated data per topic: a real Analista would query a database or call an analytics tool
+METRICS = {
+    "ventas": {"variacion": "+20%", "detalle": "ingresos de $12,4 M contra $10,3 M del período anterior", "lectura": "crecimiento"},
+    "clientes": {"variacion": "+8%", "detalle": "1.340 clientes activos y una retención del 91%", "lectura": "crecimiento"},
+    "inventario": {"variacion": "-12%", "detalle": "rotación de 34 días, 6 productos con quiebre de stock", "lectura": "alerta"},
+    "costos": {"variacion": "+5%", "detalle": "costo logístico por pedido de $2.150", "lectura": "alerta"},
+}
+
+
+def user_request(state: AgentState) -> str:
+    """The user's request: the last message that does not come from an agent of the team."""
+    return next((m.content for m in reversed(state["messages"])
+                 if getattr(m, "name", None) not in ("Analista", "Escritor", "supervisor")), "")
+
+
+def detect_topic(request: str) -> str | None:
+    """Topic of the request, matching WHOLE words (singular or plural): a substring check would read
+    "inventario" as "venta"."""
+    words = set(re.findall(r"\w+", request.lower()))
+    return next((topic for topic in METRICS if topic in words or topic.rstrip("s") in words), None)
+
+
 def analyst_node(state: AgentState):
-    return {"messages": [HumanMessage(content="Datos procesados: +20% incremento.", name="Analista")]}
+    """Processes the data of the topic the user asked about (read from the request, not hard-coded)."""
+    request = user_request(state)
+    topic = detect_topic(request)
+    if topic is None:
+        content = f"No tengo datos para el pedido «{request}». Temas disponibles: {', '.join(METRICS)}."
+    else:
+        m = METRICS[topic]
+        content = f"Datos procesados ({topic}): {m['variacion']} respecto del período anterior; {m['detalle']}."
+    return {"messages": [HumanMessage(content=content, name="Analista")]}
+
 
 def writer_node(state: AgentState):
-    return {"messages": [HumanMessage(content="El informe está listo: Crecimiento positivo.", name="Escritor")]}
+    """Writes the report from the Analista's results (the last message with that name)."""
+    analysis = next((m.content for m in reversed(state["messages"]) if getattr(m, "name", None) == "Analista"), "")
+    topic = detect_topic(user_request(state))
+    if topic is None:
+        content = f"No se pudo armar el informe: {analysis}"
+    else:
+        reading = "Crecimiento positivo" if METRICS[topic]["lectura"] == "crecimiento" else "Requiere atención"
+        content = f"El informe de {topic} está listo: {reading}. {analysis.split(': ', 1)[-1]}"
+    return {"messages": [HumanMessage(content=content, name="Escritor")]}
 
 
 # TODO: Configura el Grafo
@@ -144,7 +197,9 @@ async def run(graph: CompiledStateGraph, request: str) -> list[str]:
             for node, output in update.items():
                 if node == "supervisor":
                     steps.append("supervisor")
-                    print(f"[supervisor] decide: {output['next']}")
+                    print(f"[supervisor] decide: {output['next']} ({output.get('reason', '')})")
+                    if output.get("messages"):   # it finished without delegating: answer to the user
+                        print(f"[supervisor → usuario] {output['messages'][-1].content}")
                 else:
                     steps.append(node)
                     print(f"[{node}] {output['messages'][-1].content}")
@@ -162,8 +217,14 @@ async def main() -> None:
     load_dotenv()
     logging.basicConfig(level=logging.WARNING, format="%(levelname)s | %(name)s | %(message)s")
     graph = build_graph(build_router())
-    await run(graph, "Necesito un reporte sobre ventas.")
-
+    requests = [
+        "Necesito un reporte sobre ventas.",        # the assignment's request
+        "Armame un informe de inventario.",          # another topic: the specialists adapt to it
+        "Hacé un reporte.",                           # ambiguous: the supervisor asks instead of guessing
+    ]
+    for request in requests:
+        await run(graph, request)
+        print("\n" + "-" * 60 + "\n")
 
 if __name__ == "__main__":
     asyncio.run(main())
