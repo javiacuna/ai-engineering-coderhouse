@@ -18,3 +18,5 @@ langchain-classic
 rank-bm25
 langgraph
 langgraph-checkpoint-sqlite
+ipykernel
+nbconvert

@@ -13,7 +13,7 @@ Ejercicios y pre-entregas del curso **AI Engineering** de Coderhouse, en Python 
 | [03](modulo-03-embeddings-vector-db/) | Embeddings, chunking y bases vectoriales | Embeddings y similitud (informe PDF) · Limpieza y chunking por tokens · CRUD con ChromaDB · **Pre-entrega 3: RAG local con ChromaDB** |
 | [04](modulo-04-vector-db-cloud/) | Bases vectoriales en la nube | Pinecone Serverless: índice, namespaces y metadatos · Ingesta masiva multi-tenant · **Pre-entrega 4: RAG escalable con Pinecone y búsqueda híbrida** |
 | [05](modulo-05-langgraph/) | Agentes con LangGraph | Diseño de un grafo de soporte (estado, aristas condicionales, human-in-the-loop) · Tool calling seguro · Ciclo ReAct con checkpoints · **Pre-entrega 5: Agente ReAct con memoria persistente en SQLite** |
-| [06](modulo-06-sistemas-multiagente/) | Sistemas multi-agente | Propuesta de topología jerárquica (supervisor + especialistas) para responder quejas en Twitter |
+| [06](modulo-06-sistemas-multiagente/) | Sistemas multi-agente | Propuesta de topología jerárquica · Patrón supervisor · Estado compartido asíncrono · **Pre-entrega 6: Orquestador multi-agente (investigación + análisis + síntesis)** |
 
 ## Cómo correr los ejemplos
 

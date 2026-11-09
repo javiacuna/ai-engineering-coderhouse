@@ -141,3 +141,22 @@ Salida (las líneas de los 4 escenarios se intercalan porque corren a la vez):
 - **Mensaje defensivo:** funciona con `loc` vacío y con `loc` anidado.
 - **Escritura:** cada nodo devuelve solo su clave; un nodo que escribe la clave de otro es rechazado; los errores se agregan sin pisarse.
 - **Concurrencia:** `main()` corre los escenarios en paralelo (tarda menos que la suma de las esperas y las salidas se intercalan), y también se superponen tres corridas independientes del grafo.
+
+## Pre-entrega 6: Orquestador multi-agente especializado
+
+📁 [`pre-entrega-6-orquestador-multiagente/`](pre-entrega-6-orquestador-multiagente/)
+
+Orquestador jerárquico con LangGraph. Un **supervisor** con una rúbrica de calidad coordina a tres especialistas:
+
+- un **investigador**, que busca reseñas y precios;
+- un **analista**, que calcula el sentimiento y las estadísticas;
+- un **sintetizador**, que redacta la respuesta final.
+
+El estado registra qué aportó cada agente. El supervisor manda a refinar cuando algo falta, y tiene límites de rondas y de pasos para no entrar en bucles. Incluye un notebook (`demo.ipynb`) que muestra el flujo de delegación.
+
+![Grafo](pre-entrega-6-orquestador-multiagente/graph.png)
+
+```bash
+cd pre-entrega-6-orquestador-multiagente
+python main.py
+```
