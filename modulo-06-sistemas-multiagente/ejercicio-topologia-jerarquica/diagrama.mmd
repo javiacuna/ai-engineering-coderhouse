@@ -1,0 +1,28 @@
+flowchart TD
+    TW([Tweet que menciona a la marca]) --> SUP
+
+    SUP{{"<b>Supervisor</b><br/>planifica · delega · valida · decide"}}
+
+    SUP -- "① en paralelo" --> SENT["<b>Agente de Sentimiento</b><br/>sentimiento, intención,<br/>urgencia, nº de pedido"]
+    SUP -- "①" --> ORD["<b>Agente de Pedidos</b><br/>cliente y estado del pedido<br/>(solo lectura)"]
+    SUP -- "② riesgo normal<br/>④ rechazado (< 2 veces)" --> WRI["<b>Agente de Redacción</b><br/>respuesta ≤ 280 caracteres<br/>según la política de marca"]
+    SUP -- "③ revisar" --> REV["<b>Agente de Cumplimiento</b><br/>datos personales, promesas,<br/>tono, longitud"]
+    SUP -- "② riesgo alto<br/>④ rechazado 2 veces" --> HUM["<b>Revisión humana</b><br/>interrupt: cola de soporte"]
+    SUP -- "④ aprobado" --> PUB
+
+    SENT -.-> SUP
+    ORD -.-> SUP
+    WRI -.-> SUP
+    REV -.-> SUP
+
+    HUM --> PUB["<b>Publicador</b><br/>código, no LLM<br/>respuesta pública + DM"]
+    PUB --> FIN([Fin: traza guardada por tweet_id])
+
+    classDef sup fill:#e7f0ff,stroke:#1c4ed8,color:#111
+    classDef worker fill:#f1f8f1,stroke:#2f7d32,color:#111
+    classDef human fill:#fff1e6,stroke:#d9480f,color:#111
+    classDef code fill:#f3f3f3,stroke:#555,color:#111
+    class SUP sup
+    class SENT,ORD,WRI,REV worker
+    class HUM human
+    class PUB,TW,FIN code
