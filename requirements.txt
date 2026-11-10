@@ -20,3 +20,6 @@ langgraph
 langgraph-checkpoint-sqlite
 ipykernel
 nbconvert
+arize-phoenix
+arize-phoenix-otel
+openinference-instrumentation-langchain

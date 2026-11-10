@@ -1,0 +1,64 @@
+{
+  "project": "orquestador-m7-20261109-2002",
+  "judge_model": "gemini-3.8-flash",
+  "results": [
+    {
+      "scenario": "f1-fuera-de-alcance",
+      "verdict": "alucinación",
+      "unsupported_claims": [
+        "El iPhone 17 aún no ha sido lanzado al mercado"
+      ],
+      "explanation": "El contexto solo indica que no se encontraron precios ni reseñas, pero no menciona el motivo de la ausencia de datos ni afirma explícitamente que el producto no haya sido lanzado.",
+      "judge_model": "gemini-flash-lite-latest",
+      "numeric_check": "ok"
+    },
+    {
+      "scenario": "f2-fuente-caida",
+      "verdict": "fiel",
+      "unsupported_claims": [],
+      "explanation": "La respuesta refleja correctamente que las llamadas para obtener las reseñas fallaron con errores de conexión, indicando con precisión la falta de datos sin alucinar información.",
+      "judge_model": "gemini-flash-lite-latest",
+      "numeric_check": "ok"
+    },
+    {
+      "scenario": "q1-comparacion",
+      "verdict": "fiel",
+      "unsupported_claims": [],
+      "explanation": "Todas las afirmaciones sobre sentimientos, precios promedios y conclusiones están respaldadas directamente por las herramientas de estadísticas y análisis de sentimiento del contexto.",
+      "judge_model": "gemini-flash-lite-latest",
+      "numeric_check": "ok"
+    },
+    {
+      "scenario": "q2-ranking",
+      "verdict": "fiel",
+      "unsupported_claims": [],
+      "explanation": "Todas las métricas de sentimiento, valoraciones y precios coinciden exactamente con los datos provistos en el contexto por las herramientas.",
+      "judge_model": "gemini-flash-lite-latest",
+      "numeric_check": "ok"
+    },
+    {
+      "scenario": "q3-quejas",
+      "verdict": "fiel",
+      "unsupported_claims": [],
+      "explanation": "Todas las afirmaciones sobre las quejas, puntajes, precios y la mejor tienda se deducen directamente de las herramientas de contexto.",
+      "judge_model": "gemini-flash-lite-latest",
+      "numeric_check": "ok"
+    },
+    {
+      "scenario": "q4-presupuesto",
+      "verdict": "fiel",
+      "unsupported_claims": [],
+      "explanation": "Todas las afirmaciones sobre el precio, las reseñas y el promedio se derivan exactamente de los datos proporcionados por las herramientas en el contexto.",
+      "judge_model": "gemini-flash-lite-latest",
+      "numeric_check": "ok"
+    },
+    {
+      "scenario": "q5-uso",
+      "verdict": "fiel",
+      "unsupported_claims": [],
+      "explanation": "Todas las afirmaciones sobre comodidad, durabilidad, precios y calificaciones están totalmente respaldadas por los datos y estadísticas del contexto.",
+      "judge_model": "gemini-flash-lite-latest",
+      "numeric_check": "ok"
+    }
+  ]
+}

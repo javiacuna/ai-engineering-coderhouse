@@ -1,0 +1,5 @@
+# Phoenix server + OpenTelemetry exporter + LangChain/LangGraph instrumentation
+arize-phoenix
+arize-phoenix-otel
+openinference-instrumentation-langchain
+# The traced system is the Module 6 orchestrator (its requirements: langgraph, langchain-google-genai, ...)

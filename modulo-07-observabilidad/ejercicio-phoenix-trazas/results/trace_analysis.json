@@ -1,0 +1,522 @@
+{
+  "project": "orquestador-m7-20261109-2002",
+  "requests": 7,
+  "latency": {
+    "request_p50": 12.23,
+    "request_p95": 39.77,
+    "llm_call_p50": 1.13,
+    "llm_call_p95": 2.36,
+    "share_external_pct": 74.2,
+    "share_wait_pct": 24.4,
+    "request_p95_without_waits": 21.37
+  },
+  "tokens": {
+    "total_prompt": 40920,
+    "total_completion": 7675,
+    "estimated_cost_usd": 0.031464,
+    "longest_reasoning": {
+      "scenario": "q2-ranking",
+      "trace_id": "171656169e02d8f002c052e4371469c5",
+      "prompt_tokens": 9306,
+      "completion_tokens": 1817,
+      "llm_calls": 12,
+      "estimated_cost_usd": 0.007334,
+      "by_agent": {
+        "analyst": {
+          "llm_calls": 4,
+          "prompt_tokens": 1804,
+          "completion_tokens": 1036,
+          "llm_seconds": 6.89
+        },
+        "researcher": {
+          "llm_calls": 3,
+          "prompt_tokens": 3172,
+          "completion_tokens": 194,
+          "llm_seconds": 2.87
+        },
+        "supervisor": {
+          "llm_calls": 4,
+          "prompt_tokens": 2667,
+          "completion_tokens": 335,
+          "llm_seconds": 5.06
+        },
+        "synthesizer": {
+          "llm_calls": 1,
+          "prompt_tokens": 1663,
+          "completion_tokens": 252,
+          "llm_seconds": 1.47
+        }
+      }
+    }
+  },
+  "traces": [
+    {
+      "trace_id": "f0fa56814b08cc82076eeb14ce09525b",
+      "scenario": "q1-comparacion",
+      "total_seconds": 12.23,
+      "external_seconds": 11.98,
+      "llm_seconds": 11.92,
+      "data_source_seconds": 0.05,
+      "local_processing_seconds": 0.25,
+      "tool_compute_seconds": 0.01,
+      "orchestration_seconds": 0.24,
+      "wait_seconds": 0,
+      "llm_calls": 9,
+      "tool_calls": 8,
+      "prompt_tokens": 6724,
+      "completion_tokens": 1476,
+      "estimated_cost_usd": 0.005707,
+      "tokens_by_agent": {
+        "analyst": {
+          "llm_calls": 2,
+          "prompt_tokens": 1210,
+          "completion_tokens": 754,
+          "llm_seconds": 3.75
+        },
+        "researcher": {
+          "llm_calls": 2,
+          "prompt_tokens": 1552,
+          "completion_tokens": 191,
+          "llm_seconds": 2.2
+        },
+        "supervisor": {
+          "llm_calls": 4,
+          "prompt_tokens": 2591,
+          "completion_tokens": 308,
+          "llm_seconds": 4.46
+        },
+        "synthesizer": {
+          "llm_calls": 1,
+          "prompt_tokens": 1371,
+          "completion_tokens": 223,
+          "llm_seconds": 1.52
+        }
+      },
+      "slowest_span": {
+        "name": "ChatGoogleGenerativeAI",
+        "kind": "LLM",
+        "seconds": 2.83,
+        "agent": "analyst"
+      },
+      "errors": [],
+      "error_propagated_spans": 0,
+      "groundedness": {
+        "answer_numbers": [
+          0.0,
+          0.33,
+          2.83,
+          4.17,
+          33.3,
+          50.0,
+          88666.67,
+          182000.0
+        ],
+        "ungrounded_numbers": [],
+        "grounded": true,
+        "used_tool_data": true,
+        "admits_missing_data": false
+      },
+      "final_answer": "El **SoundMax Pro** tiene mejor sentimiento en las reseñas, con un puntaje de 0,33, un 50,0% de opiniones positivas, un puntaje promedio de 4,17 y destacando en sonido, batería y comodidad. En cambio, el **AudioZen X** registra un sentimiento de 0,0, un 33,3% de positivas, un puntaje promedio de 2,83 y críticas en durabilidad y comodidad (aunque también se alaba su precio). \nEl precio promedio del SoundMax Pro es de $182.000, mientras que el del AudioZen X es de $88.666,67. Existe una tensión clara: el modelo más barato (AudioZen X) es el peor valorado y tiene problemas de durabilidad, frente a un SoundMax Pro que duplica sus reseñas positivas pero cuesta más del doble. \nTe recomiendo el SoundMax Pro porque, a pesar de ser más caro, ofrece una calidad general y satisfacción de los clientes notablemente superior."
+    },
+    {
+      "trace_id": "171656169e02d8f002c052e4371469c5",
+      "scenario": "q2-ranking",
+      "total_seconds": 46.81,
+      "external_seconds": 16.4,
+      "llm_seconds": 16.29,
+      "data_source_seconds": 0.11,
+      "local_processing_seconds": 0.35,
+      "tool_compute_seconds": 0.03,
+      "orchestration_seconds": 0.32,
+      "wait_seconds": 30.06,
+      "llm_calls": 12,
+      "tool_calls": 18,
+      "prompt_tokens": 9306,
+      "completion_tokens": 1817,
+      "estimated_cost_usd": 0.007334,
+      "tokens_by_agent": {
+        "analyst": {
+          "llm_calls": 4,
+          "prompt_tokens": 1804,
+          "completion_tokens": 1036,
+          "llm_seconds": 6.89
+        },
+        "researcher": {
+          "llm_calls": 3,
+          "prompt_tokens": 3172,
+          "completion_tokens": 194,
+          "llm_seconds": 2.87
+        },
+        "supervisor": {
+          "llm_calls": 4,
+          "prompt_tokens": 2667,
+          "completion_tokens": 335,
+          "llm_seconds": 5.06
+        },
+        "synthesizer": {
+          "llm_calls": 1,
+          "prompt_tokens": 1663,
+          "completion_tokens": 252,
+          "llm_seconds": 1.47
+        }
+      },
+      "slowest_span": {
+        "name": "ChatGoogleGenerativeAI",
+        "kind": "LLM",
+        "seconds": 2.55,
+        "agent": "analyst"
+      },
+      "errors": [
+        {
+          "span": "ChatGoogleGenerativeAI",
+          "kind": "LLM",
+          "message": "GoogleRateLimitError(\"Error calling model 'gemini-flash-lite-latest' (RESOURCE_EXHAUSTED): 429 RESOURCE_EXHAUSTED. {'err",
+          "agent": "analyst"
+        }
+      ],
+      "error_propagated_spans": 4,
+      "groundedness": {
+        "answer_numbers": [
+          0.0,
+          0.33,
+          0.67,
+          1.0,
+          2.0,
+          2.8,
+          3.0,
+          4.0,
+          4.2,
+          16.7,
+          33.3,
+          50.0,
+          66.7,
+          88667.0,
+          117500.0,
+          182000.0
+        ],
+        "ungrounded_numbers": [],
+        "grounded": true,
+        "used_tool_data": true,
+        "admits_missing_data": false
+      },
+      "final_answer": "Ranking de productos según el sentimiento de las reseñas (de mayor a menor):\n1. **BassBoom 3**: Puntaje de sentimiento de 0,67 (66,7% positivos, 0,0% negativos) y promedio de 4,0 estrellas. Precio promedio: $117.500.\n2. **SoundMax Pro**: Puntaje de sentimiento de 0,33 (50,0% positivos, 16,7% negativos) y promedio de 4,2 estrellas. Precio promedio: $182.000.\n3. **AudioZen X**: Puntaje de sentimiento de 0,0 (33,3% positivos, 33,3% negativos) y promedio de 2,8 estrellas. Precio promedio: $88.667.\n\nEl **BassBoom 3** tiene la mejor relación precio-valoración, ya que ofrece el sentimiento más alto y sólido respaldo sin reseñas negativas a un costo intermedio, mientras que el más barato (**AudioZen X**) es el peor valorado. Se recomienda adquirir el BassBoom 3 porque equilibra una excelente recepción de los usuarios con un precio competitivo."
+    },
+    {
+      "trace_id": "a91459096cd136ef5008b2dcd952e561",
+      "scenario": "q3-quejas",
+      "total_seconds": 23.35,
+      "external_seconds": 23.14,
+      "llm_seconds": 23.09,
+      "data_source_seconds": 0.05,
+      "local_processing_seconds": 0.2,
+      "tool_compute_seconds": 0.01,
+      "orchestration_seconds": 0.2,
+      "wait_seconds": 0,
+      "llm_calls": 9,
+      "tool_calls": 4,
+      "prompt_tokens": 5504,
+      "completion_tokens": 1033,
+      "estimated_cost_usd": 0.004234,
+      "tokens_by_agent": {
+        "analyst": {
+          "llm_calls": 2,
+          "prompt_tokens": 995,
+          "completion_tokens": 469,
+          "llm_seconds": 2.71
+        },
+        "researcher": {
+          "llm_calls": 2,
+          "prompt_tokens": 1131,
+          "completion_tokens": 106,
+          "llm_seconds": 2.11
+        },
+        "supervisor": {
+          "llm_calls": 4,
+          "prompt_tokens": 2441,
+          "completion_tokens": 306,
+          "llm_seconds": 5.71
+        },
+        "synthesizer": {
+          "llm_calls": 1,
+          "prompt_tokens": 937,
+          "completion_tokens": 152,
+          "llm_seconds": 12.56
+        }
+      },
+      "slowest_span": {
+        "name": "ChatGoogleGenerativeAI",
+        "kind": "LLM",
+        "seconds": 12.56,
+        "agent": "synthesizer"
+      },
+      "errors": [],
+      "error_propagated_spans": 0,
+      "groundedness": {
+        "answer_numbers": [
+          2.8,
+          5.0,
+          85000.0,
+          88667.0
+        ],
+        "ungrounded_numbers": [],
+        "grounded": true,
+        "used_tool_data": true,
+        "admits_missing_data": false
+      },
+      "final_answer": "Las principales quejas de los clientes sobre los **AudioZen X** (con un puntaje promedio de 2,8 de 5) son los problemas de **durabilidad** y las quejas recurrentes sobre la **comodidad**, un aspecto que genera opiniones divididas ya que también figura entre los elogios. \n\nRespecto a dónde comprarlos, conviene adquirirlos en **MegaStore**, que ofrece el precio mínimo de **$85.000** (frente al promedio de $88.667). \n\n*Recomendación:* Se recomienda comprar los AudioZen X en MegaStore por su menor precio, teniendo en cuenta que su durabilidad y comodidad generan opiniones muy divididas entre los usuarios."
+    },
+    {
+      "trace_id": "19f38ca69a921263bb9d1444678566d2",
+      "scenario": "q4-presupuesto",
+      "total_seconds": 11.08,
+      "external_seconds": 10.88,
+      "llm_seconds": 10.83,
+      "data_source_seconds": 0.05,
+      "local_processing_seconds": 0.2,
+      "tool_compute_seconds": 0.01,
+      "orchestration_seconds": 0.2,
+      "wait_seconds": 0,
+      "llm_calls": 9,
+      "tool_calls": 4,
+      "prompt_tokens": 5276,
+      "completion_tokens": 944,
+      "estimated_cost_usd": 0.003943,
+      "tokens_by_agent": {
+        "analyst": {
+          "llm_calls": 2,
+          "prompt_tokens": 986,
+          "completion_tokens": 376,
+          "llm_seconds": 2.34
+        },
+        "researcher": {
+          "llm_calls": 2,
+          "prompt_tokens": 961,
+          "completion_tokens": 106,
+          "llm_seconds": 2.14
+        },
+        "supervisor": {
+          "llm_calls": 4,
+          "prompt_tokens": 2486,
+          "completion_tokens": 324,
+          "llm_seconds": 4.84
+        },
+        "synthesizer": {
+          "llm_calls": 1,
+          "prompt_tokens": 843,
+          "completion_tokens": 138,
+          "llm_seconds": 1.5
+        }
+      },
+      "slowest_span": {
+        "name": "ChatGoogleGenerativeAI",
+        "kind": "LLM",
+        "seconds": 1.63,
+        "agent": "supervisor"
+      },
+      "errors": [],
+      "error_propagated_spans": 0,
+      "groundedness": {
+        "answer_numbers": [
+          3.0,
+          4.0,
+          5.0,
+          115000.0,
+          117500.0,
+          120000.0
+        ],
+        "ungrounded_numbers": [],
+        "grounded": true,
+        "used_tool_data": true,
+        "admits_missing_data": false
+      },
+      "final_answer": "Sí, te alcanza con tu presupuesto de $120.000, ya que el BassBoom 3 tiene un precio promedio de $117.500 (incluso se consigue a $115.000 en MegaStore). \n\nRespecto a su calidad, las 3 reseñas analizadas le otorgan un puntaje promedio de 4,0 sobre 5. Los usuarios destacan positivamente aspectos como su durabilidad y la calidad de sonido, sin reportar contras ni registrar reseñas negativas. \n\nTe recomendamos comprarlo con confianza, ya que cuenta con excelente aceptación de los usuarios y se ajusta perfectamente a tu presupuesto."
+    },
+    {
+      "trace_id": "72be92d1d37ea1f5a7c5cb0bfb4c9489",
+      "scenario": "q5-uso",
+      "total_seconds": 12.72,
+      "external_seconds": 12.44,
+      "llm_seconds": 12.34,
+      "data_source_seconds": 0.1,
+      "local_processing_seconds": 0.27,
+      "tool_compute_seconds": 0.02,
+      "orchestration_seconds": 0.25,
+      "wait_seconds": 0,
+      "llm_calls": 10,
+      "tool_calls": 8,
+      "prompt_tokens": 7762,
+      "completion_tokens": 1549,
+      "estimated_cost_usd": 0.006201,
+      "tokens_by_agent": {
+        "analyst": {
+          "llm_calls": 2,
+          "prompt_tokens": 1204,
+          "completion_tokens": 779,
+          "llm_seconds": 3.22
+        },
+        "researcher": {
+          "llm_calls": 3,
+          "prompt_tokens": 2647,
+          "completion_tokens": 147,
+          "llm_seconds": 2.79
+        },
+        "supervisor": {
+          "llm_calls": 4,
+          "prompt_tokens": 2516,
+          "completion_tokens": 318,
+          "llm_seconds": 4.79
+        },
+        "synthesizer": {
+          "llm_calls": 1,
+          "prompt_tokens": 1395,
+          "completion_tokens": 305,
+          "llm_seconds": 1.54
+        }
+      },
+      "slowest_span": {
+        "name": "ChatGoogleGenerativeAI",
+        "kind": "LLM",
+        "seconds": 2.25,
+        "agent": "analyst"
+      },
+      "errors": [],
+      "error_propagated_spans": 0,
+      "groundedness": {
+        "answer_numbers": [
+          2.83,
+          4.17,
+          85000.0,
+          88667.0,
+          175000.0,
+          182000.0
+        ],
+        "ungrounded_numbers": [],
+        "grounded": true,
+        "used_tool_data": true,
+        "admits_missing_data": true
+      },
+      "final_answer": "Para entrenar en el gimnasio, la comparación entre el SoundMax Pro y el AudioZen X se presenta de la siguiente manera:\n\n- **Comodidad:** El SoundMax Pro destaca positivamente por su comodidad. En el caso del AudioZen X, la comodidad aparece tanto entre los aspectos más elogiados como entre las contras más criticadas, lo que muestra una experiencia de uso muy polarizada.\n- **Durabilidad:** No hay datos específicos sobre la durabilidad del SoundMax Pro, mientras que el AudioZen X presenta críticas negativas directas respecto a su durabilidad, siendo una de sus principales debilidades.\n- **Precio:** El AudioZen X es considerablemente más económico, con un precio promedio de $88.667 (mínimo de $85.000 en MegaStore). Por su parte, el SoundMax Pro tiene un precio promedio de $182.000 (mínimo de $175.000 en AudioWorld).\n\nAquí se observa una tensión importante: el AudioZen X es mucho más barato, pero resulta ser el peor valorado (2,83 de puntaje promedio frente a los 4,17 del SoundMax Pro) debido a sus problemas de durabilidad y opiniones divididas sobre su comodidad. \n\nTe conviene más comprar el **SoundMax Pro** porque, a pesar de ser más costoso, ofrece mayor calidad general y mejor comodidad para el uso deportivo."
+    },
+    {
+      "trace_id": "9100ac571d96bc3471a48e826be77e05",
+      "scenario": "f1-fuera-de-alcance",
+      "total_seconds": 7.42,
+      "external_seconds": 7.25,
+      "llm_seconds": 7.25,
+      "data_source_seconds": 0.0,
+      "local_processing_seconds": 0.17,
+      "tool_compute_seconds": 0.01,
+      "orchestration_seconds": 0.16,
+      "wait_seconds": 0,
+      "llm_calls": 7,
+      "tool_calls": 4,
+      "prompt_tokens": 3346,
+      "completion_tokens": 408,
+      "estimated_cost_usd": 0.002024,
+      "tokens_by_agent": {
+        "researcher": {
+          "llm_calls": 3,
+          "prompt_tokens": 1452,
+          "completion_tokens": 119,
+          "llm_seconds": 3.39
+        },
+        "supervisor": {
+          "llm_calls": 3,
+          "prompt_tokens": 1576,
+          "completion_tokens": 238,
+          "llm_seconds": 3.03
+        },
+        "synthesizer": {
+          "llm_calls": 1,
+          "prompt_tokens": 318,
+          "completion_tokens": 51,
+          "llm_seconds": 0.84
+        }
+      },
+      "slowest_span": {
+        "name": "ChatGoogleGenerativeAI",
+        "kind": "LLM",
+        "seconds": 1.7,
+        "agent": "researcher"
+      },
+      "errors": [],
+      "error_propagated_spans": 0,
+      "groundedness": {
+        "answer_numbers": [
+          17.0
+        ],
+        "ungrounded_numbers": [],
+        "grounded": true,
+        "used_tool_data": false,
+        "admits_missing_data": true
+      },
+      "final_answer": "El iPhone 17 aún no ha sido lanzado al mercado, por lo que actualmente no cuenta con reseñas de clientes ni con precios disponibles en las tiendas. \n\nTe recomendamos esperar a su lanzamiento oficial para poder comparar precios y opiniones en las distintas tiendas."
+    },
+    {
+      "trace_id": "8a41fc228c129579c661a011bdffb249",
+      "scenario": "f2-fuente-caida",
+      "total_seconds": 9.42,
+      "external_seconds": 9.24,
+      "llm_seconds": 9.21,
+      "data_source_seconds": 0.03,
+      "local_processing_seconds": 0.17,
+      "tool_compute_seconds": 0,
+      "orchestration_seconds": 0.18,
+      "wait_seconds": 0,
+      "llm_calls": 7,
+      "tool_calls": 2,
+      "prompt_tokens": 3002,
+      "completion_tokens": 448,
+      "estimated_cost_usd": 0.002021,
+      "tokens_by_agent": {
+        "researcher": {
+          "llm_calls": 2,
+          "prompt_tokens": 719,
+          "completion_tokens": 72,
+          "llm_seconds": 3.03
+        },
+        "supervisor": {
+          "llm_calls": 4,
+          "prompt_tokens": 1990,
+          "completion_tokens": 298,
+          "llm_seconds": 5.08
+        },
+        "synthesizer": {
+          "llm_calls": 1,
+          "prompt_tokens": 293,
+          "completion_tokens": 78,
+          "llm_seconds": 1.1
+        }
+      },
+      "slowest_span": {
+        "name": "ChatGoogleGenerativeAI",
+        "kind": "LLM",
+        "seconds": 2.11,
+        "agent": "researcher"
+      },
+      "errors": [
+        {
+          "span": "db.reviews.search",
+          "kind": "RETRIEVER",
+          "message": "ConnectionError: fuente de reseñas no disponible (simulación de caída)",
+          "agent": "researcher"
+        },
+        {
+          "span": "search_reviews",
+          "kind": "TOOL",
+          "message": "ConnectionError('fuente de reseñas no disponible (simulación de caída)')Traceback (most recent call last):",
+          "agent": "researcher"
+        }
+      ],
+      "error_propagated_spans": 6,
+      "groundedness": {
+        "answer_numbers": [],
+        "ungrounded_numbers": [],
+        "grounded": true,
+        "used_tool_data": false,
+        "admits_missing_data": true
+      },
+      "final_answer": "No fue posible obtener las reseñas ni los precios de los SoundMax Pro debido a fallas en las fuentes externas tras dos intentos. Por lo tanto, no disponemos de información actualizada sobre la opinión de los clientes ni sobre su costo en el mercado. \n\nTe recomendamos buscar en tiendas físicas o esperar a que los sistemas de consulta se restablezcan para poder comparar precios y opiniones con precisión."
+    }
+  ]
+}

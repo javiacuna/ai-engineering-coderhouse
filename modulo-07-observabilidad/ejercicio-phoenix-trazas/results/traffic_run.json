@@ -1,0 +1,113 @@
+{
+  "project": "orquestador-m7-20261109-2002",
+  "prompt_template_version": "orquestador-v1.2",
+  "runs": [
+    {
+      "scenario": "q1-comparacion",
+      "type": "compleja",
+      "task": "Compará las opiniones de los clientes sobre los auriculares SoundMax Pro y AudioZen X: ¿cuál tiene mejor sentimiento en las reseñas, cuál es el precio promedio de cada uno y cuál me recomendarías?",
+      "trace_id": "f0fa56814b08cc82076eeb14ce09525b",
+      "elapsed_seconds": 12.2,
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "errors": [],
+      "final_answer": "El **SoundMax Pro** tiene mejor sentimiento en las reseñas, con un puntaje de 0,33, un 50,0% de opiniones positivas, un puntaje promedio de 4,17 y destacando en sonido, batería y comodidad. En cambio, el **AudioZen X** registra un sentimiento de 0,0, un 33,3% de positivas, un puntaje promedio de 2,83 y críticas en durabilidad y comodidad (aunque también se alaba su precio). \nEl precio promedio del SoundMax Pro es de $182.000, mientras que el del AudioZen X es de $88.666,67. Existe una tensión clara: el modelo más barato (AudioZen X) es el peor valorado y tiene problemas de durabilidad, frente a un SoundMax Pro que duplica sus reseñas positivas pero cuesta más del doble. \nTe recomiendo el SoundMax Pro porque, a pesar de ser más caro, ofrece una calidad general y satisfacción de los clientes notablemente superior."
+    },
+    {
+      "scenario": "q2-ranking",
+      "type": "compleja",
+      "task": "Armá un ranking de SoundMax Pro, AudioZen X y BassBoom 3 según el sentimiento de las reseñas y decime cuál tiene la mejor relación precio-valoración.",
+      "trace_id": "171656169e02d8f002c052e4371469c5",
+      "elapsed_seconds": 46.8,
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "errors": [],
+      "final_answer": "Ranking de productos según el sentimiento de las reseñas (de mayor a menor):\n1. **BassBoom 3**: Puntaje de sentimiento de 0,67 (66,7% positivos, 0,0% negativos) y promedio de 4,0 estrellas. Precio promedio: $117.500.\n2. **SoundMax Pro**: Puntaje de sentimiento de 0,33 (50,0% positivos, 16,7% negativos) y promedio de 4,2 estrellas. Precio promedio: $182.000.\n3. **AudioZen X**: Puntaje de sentimiento de 0,0 (33,3% positivos, 33,3% negativos) y promedio de 2,8 estrellas. Precio promedio: $88.667.\n\nEl **BassBoom 3** tiene la mejor relación precio-valoración, ya que ofrece el sentimiento más alto y sólido respaldo sin reseñas negativas a un costo intermedio, mientras que el más barato (**AudioZen X**) es el peor valorado. Se recomienda adquirir el BassBoom 3 porque equilibra una excelente recepción de los usuarios con un precio competitivo."
+    },
+    {
+      "scenario": "q3-quejas",
+      "type": "compleja",
+      "task": "¿Cuáles son las principales quejas de los clientes sobre los AudioZen X y en qué tienda conviene comprarlos?",
+      "trace_id": "a91459096cd136ef5008b2dcd952e561",
+      "elapsed_seconds": 23.3,
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "errors": [],
+      "final_answer": "Las principales quejas de los clientes sobre los **AudioZen X** (con un puntaje promedio de 2,8 de 5) son los problemas de **durabilidad** y las quejas recurrentes sobre la **comodidad**, un aspecto que genera opiniones divididas ya que también figura entre los elogios. \n\nRespecto a dónde comprarlos, conviene adquirirlos en **MegaStore**, que ofrece el precio mínimo de **$85.000** (frente al promedio de $88.667). \n\n*Recomendación:* Se recomienda comprar los AudioZen X en MegaStore por su menor precio, teniendo en cuenta que su durabilidad y comodidad generan opiniones muy divididas entre los usuarios."
+    },
+    {
+      "scenario": "q4-presupuesto",
+      "type": "compleja",
+      "task": "Tengo $120.000 de presupuesto. ¿Me alcanza para el BassBoom 3? ¿Qué dicen las reseñas sobre su calidad?",
+      "trace_id": "19f38ca69a921263bb9d1444678566d2",
+      "elapsed_seconds": 11.1,
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "errors": [],
+      "final_answer": "Sí, te alcanza con tu presupuesto de $120.000, ya que el BassBoom 3 tiene un precio promedio de $117.500 (incluso se consigue a $115.000 en MegaStore). \n\nRespecto a su calidad, las 3 reseñas analizadas le otorgan un puntaje promedio de 4,0 sobre 5. Los usuarios destacan positivamente aspectos como su durabilidad y la calidad de sonido, sin reportar contras ni registrar reseñas negativas. \n\nTe recomendamos comprarlo con confianza, ya que cuenta con excelente aceptación de los usuarios y se ajusta perfectamente a tu presupuesto."
+    },
+    {
+      "scenario": "q5-uso",
+      "type": "compleja",
+      "task": "Para usar en el gimnasio, ¿qué me conviene más entre SoundMax Pro y AudioZen X? Tené en cuenta la comodidad, la durabilidad y el precio.",
+      "trace_id": "72be92d1d37ea1f5a7c5cb0bfb4c9489",
+      "elapsed_seconds": 12.7,
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "errors": [],
+      "final_answer": "Para entrenar en el gimnasio, la comparación entre el SoundMax Pro y el AudioZen X se presenta de la siguiente manera:\n\n- **Comodidad:** El SoundMax Pro destaca positivamente por su comodidad. En el caso del AudioZen X, la comodidad aparece tanto entre los aspectos más elogiados como entre las contras más criticadas, lo que muestra una experiencia de uso muy polarizada.\n- **Durabilidad:** No hay datos específicos sobre la durabilidad del SoundMax Pro, mientras que el AudioZen X presenta críticas negativas directas respecto a su durabilidad, siendo una de sus principales debilidades.\n- **Precio:** El AudioZen X es considerablemente más económico, con un precio promedio de $88.667 (mínimo de $85.000 en MegaStore). Por su parte, el SoundMax Pro tiene un precio promedio de $182.000 (mínimo de $175.000 en AudioWorld).\n\nAquí se observa una tensión importante: el AudioZen X es mucho más barato, pero resulta ser el peor valorado (2,83 de puntaje promedio frente a los 4,17 del SoundMax Pro) debido a sus problemas de durabilidad y opiniones divididas sobre su comodidad. \n\nTe conviene más comprar el **SoundMax Pro** porque, a pesar de ser más costoso, ofrece mayor calidad general y mejor comodidad para el uso deportivo."
+    },
+    {
+      "scenario": "f1-fuera-de-alcance",
+      "type": "falla: fuera de alcance",
+      "task": "¿Qué opinan los clientes del iPhone 17 y cuánto cuesta en las tiendas?",
+      "trace_id": "9100ac571d96bc3471a48e826be77e05",
+      "elapsed_seconds": 7.4,
+      "flow": [
+        "researcher",
+        "synthesizer",
+        "FINISH"
+      ],
+      "errors": [],
+      "final_answer": "El iPhone 17 aún no ha sido lanzado al mercado, por lo que actualmente no cuenta con reseñas de clientes ni con precios disponibles en las tiendas. \n\nTe recomendamos esperar a su lanzamiento oficial para poder comparar precios y opiniones en las distintas tiendas."
+    },
+    {
+      "scenario": "f2-fuente-caida",
+      "type": "falla: herramienta desconectada",
+      "task": "¿Qué opinan los clientes de los SoundMax Pro y cuánto cuestan?",
+      "trace_id": "8a41fc228c129579c661a011bdffb249",
+      "elapsed_seconds": 9.4,
+      "flow": [
+        "researcher",
+        "researcher",
+        "synthesizer",
+        "FINISH"
+      ],
+      "errors": [
+        "ConnectionError: fuente de reseñas no disponible (simulación de caída)",
+        "ConnectionError: fuente de reseñas no disponible (simulación de caída)"
+      ],
+      "final_answer": "No fue posible obtener las reseñas ni los precios de los SoundMax Pro debido a fallas en las fuentes externas tras dos intentos. Por lo tanto, no disponemos de información actualizada sobre la opinión de los clientes ni sobre su costo en el mercado. \n\nTe recomendamos buscar en tiendas físicas o esperar a que los sistemas de consulta se restablezcan para poder comparar precios y opiniones con precisión."
+    }
+  ]
+}
