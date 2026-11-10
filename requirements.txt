@@ -23,3 +23,9 @@ nbconvert
 arize-phoenix
 arize-phoenix-otel
 openinference-instrumentation-langchain
+fastapi
+uvicorn
+redis
+fakeredis
+pytest-asyncio
+httpx

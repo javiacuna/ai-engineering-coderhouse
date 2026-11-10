@@ -14,7 +14,7 @@ Ejercicios y pre-entregas del curso **AI Engineering** de Coderhouse, en Python 
 | [04](modulo-04-vector-db-cloud/) | Bases vectoriales en la nube | Pinecone Serverless: índice, namespaces y metadatos · Ingesta masiva multi-tenant · **Pre-entrega 4: RAG escalable con Pinecone y búsqueda híbrida** |
 | [05](modulo-05-langgraph/) | Agentes con LangGraph | Diseño de un grafo de soporte (estado, aristas condicionales, human-in-the-loop) · Tool calling seguro · Ciclo ReAct con checkpoints · **Pre-entrega 5: Agente ReAct con memoria persistente en SQLite** |
 | [06](modulo-06-sistemas-multiagente/) | Sistemas multi-agente | Propuesta de topología jerárquica · Patrón supervisor · Estado compartido asíncrono · **Pre-entrega 6: Orquestador multi-agente (investigación + análisis + síntesis)** |
-| [07](modulo-07-observabilidad/) | Observabilidad y trazado | Instrumentación del orquestador con Arize Phoenix y análisis de trazas (latencia, tokens, groundedness) |
+| [07](modulo-07-observabilidad/) | Observabilidad y trazado | Instrumentación del orquestador con Arize Phoenix y análisis de trazas (latencia, tokens, groundedness); API asíncrona con FastAPI y una cola en Redis |
 
 ## Cómo correr los ejemplos
 
