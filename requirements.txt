@@ -29,3 +29,4 @@ redis
 fakeredis
 pytest-asyncio
 httpx
+langgraph-checkpoint-redis

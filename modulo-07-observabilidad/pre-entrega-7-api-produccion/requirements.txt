@@ -1,0 +1,26 @@
+# API and queue
+fastapi
+uvicorn
+redis>=5
+httpx
+
+# Multi-agent system (module 6)
+langgraph>=1.0
+langchain-core
+langchain-google-genai
+pydantic>=2
+python-dotenv
+# langchain-openai / langchain-anthropic: only if LLM_PROVIDER=openai / anthropic
+
+# Optional: the official Redis checkpointer (CHECKPOINTER=langgraph-redis, needs Redis 8 / Redis Stack)
+langgraph-checkpoint-redis
+
+# Observability
+arize-phoenix            # the local Phoenix server (python -m phoenix.server.main serve)
+arize-phoenix-otel
+openinference-instrumentation-langchain
+
+# Tests
+pytest
+pytest-asyncio
+fakeredis

@@ -1,0 +1,13 @@
+flowchart TD
+    S([START]) --> A["assess_risk<br/>política de riesgo (código)"]
+    A -->|"crítica: costo ≥ umbral"| E{{"approve_execution<br/>interrupt()"}}
+    A -->|"no crítica"| O["run_orchestrator<br/>supervisor + researcher<br/>+ analyst + synthesizer"]
+    E -->|"aprobada"| O
+    E -->|"rechazada"| X([END · REJECTED])
+    O -->|"sin deliver_to"| D([END · DONE])
+    O -->|"con deliver_to"| V{{"approve_delivery<br/>interrupt() con el borrador"}}
+    V -->|"aprobada"| M["send_report<br/>efecto externo: email"]
+    V -->|"rechazada"| D2([END · DONE sin enviar])
+    M --> D3([END · DONE enviado])
+    classDef hitl fill:#fff3cd,stroke:#c99a06,color:#333
+    class E,V hitl

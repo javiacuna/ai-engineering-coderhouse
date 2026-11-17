@@ -1,0 +1,48 @@
+# Everything with one command:  docker compose up --build
+#   API      → http://localhost:8000/docs
+#   Phoenix  → http://localhost:6006
+# More workers:  docker compose up --build --scale worker=3
+services:
+  redis:
+    image: redis:8                     # includes the Search and JSON modules: both checkpointers work
+    command: ["redis-server", "--appendonly", "yes"]   # AOF: jobs and checkpoints survive a Redis restart
+    ports: ["6379:6379"]
+    volumes: ["redis-data:/data"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 10
+
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    ports: ["6006:6006"]
+    volumes: ["phoenix-data:/mnt/data"]
+    environment:
+      PHOENIX_WORKING_DIR: /mnt/data
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      PHOENIX_COLLECTOR_ENDPOINT: http://phoenix:6006
+      RUN_WORKER_IN_API: "false"       # the API only enqueues; the worker service runs the agents
+    ports: ["8000:8000"]
+    depends_on:
+      redis: {condition: service_healthy}
+      phoenix: {condition: service_started}
+
+  worker:
+    build: .
+    command: ["python", "-m", "app.worker"]
+    env_file: .env
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      PHOENIX_COLLECTOR_ENDPOINT: http://phoenix:6006
+    depends_on:
+      redis: {condition: service_healthy}
+      phoenix: {condition: service_started}
+
+volumes:
+  redis-data:
+  phoenix-data:

@@ -1,0 +1,10 @@
+flowchart LR
+    C([Cliente]) -->|"POST /tasks"| API["FastAPI<br/>(solo encola)"]
+    C -->|"GET /tasks/{id}<br/>polling"| API
+    R([Revisor]) -->|"POST /tasks/{id}/approve"| API
+    API -->|"job:{id} = PENDING<br/>RPUSH jobs:queue"| REDIS[("Redis<br/>jobs · cola · checkpoints")]
+    REDIS -->|"BLPOP"| W["Worker<br/>(N tareas async)"]
+    W -->|"ainvoke / Command(resume)"| G["Grafo LangGraph<br/>+ orquestador M6"]
+    G <-->|"checkpoints<br/>(thread_id = job_id)"| REDIS
+    W -->|"RUNNING → DONE / WAITING_APPROVAL<br/>/ REJECTED / FAILED"| REDIS
+    G -.->|"trazas OTel"| P["Arize Phoenix<br/>trazas · costo · p95"]

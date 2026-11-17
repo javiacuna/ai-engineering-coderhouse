@@ -1,0 +1,143 @@
+{
+  "n": 5,
+  "started_at": "2026-11-16T23:10:51+00:00",
+  "statuses": {
+    "DONE": 5
+  },
+  "jobs": [
+    {
+      "job_id": "3d2ba9fc-a249-4c28-b88e-d84c4082b2f3",
+      "task": "Compará las opiniones de los clientes sobre los SoundMax Pro y los AudioZen X: ¿cuál tiene mejor sentimiento y cuál es el precio promedio de cada uno?",
+      "submit_ms": 119.4,
+      "status": "DONE",
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "error": null,
+      "queue_seconds": 0.03,
+      "run_seconds": 309.72,
+      "total_seconds": 309.75,
+      "trace_ids": [
+        "605637d91094a9da34a7d80422ea2ed2"
+      ],
+      "phoenix": {
+        "cost_usd": 0.005865,
+        "prompt_tokens": 6866,
+        "completion_tokens": 1522
+      }
+    },
+    {
+      "job_id": "bf9812f8-fdd1-4dd4-a158-93fed64310f5",
+      "task": "¿Cuáles son las principales quejas de los clientes sobre los AudioZen X y en qué tienda conviene comprarlos?",
+      "submit_ms": 53.2,
+      "status": "DONE",
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "error": null,
+      "queue_seconds": 0.04,
+      "run_seconds": 285.89,
+      "total_seconds": 285.95,
+      "trace_ids": [
+        "d27e6917ae894597d8144ce0c5150dc3"
+      ],
+      "phoenix": {
+        "cost_usd": 0.004201,
+        "prompt_tokens": 5470,
+        "completion_tokens": 1024
+      }
+    },
+    {
+      "job_id": "86d35c60-47d7-4ae9-bee9-cc74881a8d03",
+      "task": "Tengo $120.000 de presupuesto. ¿Me alcanza para el BassBoom 3? ¿Qué dicen las reseñas sobre su calidad?",
+      "submit_ms": 53.1,
+      "status": "DONE",
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "error": null,
+      "queue_seconds": 0.05,
+      "run_seconds": 436.72,
+      "total_seconds": 436.78,
+      "trace_ids": [
+        "9195d5e7316e686b228c0b12863b3a8f"
+      ],
+      "phoenix": {
+        "cost_usd": 0.004163,
+        "prompt_tokens": 5327,
+        "completion_tokens": 1026
+      }
+    },
+    {
+      "job_id": "dddc46ac-13f7-46bb-b3ea-5a935f6f1f53",
+      "task": "Para usar en el gimnasio, ¿qué me conviene más entre SoundMax Pro y AudioZen X? Tené en cuenta comodidad y precio.",
+      "submit_ms": 51.0,
+      "status": "DONE",
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "error": null,
+      "queue_seconds": 0.05,
+      "run_seconds": 366.29,
+      "total_seconds": 366.35,
+      "trace_ids": [
+        "bd31fb48bd9fa7a1abb9b5d21b9afd47"
+      ],
+      "phoenix": {
+        "cost_usd": 0.005909,
+        "prompt_tokens": 6745,
+        "completion_tokens": 1554
+      }
+    },
+    {
+      "job_id": "76250df3-652e-4d22-8baf-7a81efeb6a29",
+      "task": "¿Qué opinan los clientes de los SoundMax Pro y en qué tienda están más baratos?",
+      "submit_ms": 53.4,
+      "status": "DONE",
+      "flow": [
+        "researcher",
+        "analyst",
+        "synthesizer",
+        "FINISH"
+      ],
+      "error": null,
+      "queue_seconds": 0.05,
+      "run_seconds": 354.71,
+      "total_seconds": 354.78,
+      "trace_ids": [
+        "4dad6bd2530c93bfe93420eaafbed00c"
+      ],
+      "phoenix": {
+        "cost_usd": 0.005252,
+        "prompt_tokens": 5466,
+        "completion_tokens": 1198
+      }
+    }
+  ],
+  "submit_ms_max": 119.4,
+  "client": {
+    "total_p50": 354.78,
+    "total_p95": 422.69,
+    "run_p50": 354.71,
+    "run_p95": 422.63
+  },
+  "phoenix": {
+    "project": "pe7-api-agente",
+    "p50_ms": 354703.583,
+    "p95_ms": 422615.48600000003
+  },
+  "phoenix_total_cost_usd": 0.02539,
+  "phoenix_avg_cost_usd": 0.005078
+}
